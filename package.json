@@ -1,0 +1,23 @@
+{
+  "name": "agileboard_tga",
+  "version": "1.0.0",
+  "description": "Techs: NodeJS, ExpressJS, GraphQL stack, MongoDB, Redux, ReactJS, Unit tests/Integration test, Dockerized",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srlakhotia/AgileBoard_TGA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srlakhotia/AgileBoard_TGA/issues"
+  },
+  "homepage": "https://github.com/srlakhotia/AgileBoard_TGA#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
