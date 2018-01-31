@@ -1,5 +1,5 @@
-var React = require('react');
-var DefaultLayout = require('./layout');
+import DefaultLayout from './layout';
+import React from 'react';
 
 class HelloMessage extends React.Component {
   render() {
