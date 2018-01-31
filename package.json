@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon node app.js"
   },
   "repository": {
     "type": "git",
@@ -21,10 +21,17 @@
     "apollo-server": "^0.3.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "express-react-views": "^0.10.5",
     "graphql": "^0.12.3",
     "graphql-tools": "^2.19.0",
     "mongoose": "^5.0.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
   }
 }
