@@ -3,23 +3,20 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link}  from 'react-router-dom';
 
-export default class BoardCard extends Component {
+export default class ListCard extends Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-        const boardLink = `/board/${this.props.boardDetails._id}`;
         return (<React.Fragment>
             <Card>
                 <CardTitle
-                    title={this.props.boardDetails.title}>
+                    subtitle={this.props.listDetails.title}>
                 </CardTitle>
                 <CardActions>
-                    <Link to={boardLink}>
-                        <RaisedButton label="View" primary={true}/>
-                    </Link>
-                    <RaisedButton label="Delete" />
+                    <RaisedButton label="Add Card" primary={true}/>
+                    <RaisedButton label="Delete List" />
                 </CardActions>
             </Card>  
         </React.Fragment>)

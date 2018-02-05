@@ -12,6 +12,12 @@ const resolveFunctions = {
             const lists = new ListConnector.List();
             return lists.findLists(boardId);
         }
+    },
+    Mutation: {
+        addBoard(_, {title}, ctx) {
+            const board = new BoardConnector.Board();
+            return board.addBoard(title);
+        }
     }
 };
 
