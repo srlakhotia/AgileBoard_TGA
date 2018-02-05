@@ -1,41 +1,39 @@
 {
-  "name": "agileboard_tga",
+  "name": "AgileBoard_TGA",
   "version": "1.0.0",
-  "description": "Techs: NodeJS, ExpressJS, GraphQL stack, MongoDB, Redux, ReactJS, Unit tests/Integration test, Dockerized",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon node app.js"
+    "test": "test",
+    "start": "nodemon ./index.js",
+    "webpack": "webpack --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/srlakhotia/AgileBoard_TGA.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/srlakhotia/AgileBoard_TGA/issues"
-  },
-  "homepage": "https://github.com/srlakhotia/AgileBoard_TGA#readme",
   "dependencies": {
-    "apollo-server": "^0.3.3",
-    "body-parser": "^1.18.2",
+    "babel-preset-env": "^1.6.1",
     "express": "^4.16.2",
-    "express-react-views": "^0.10.5",
-    "graphql": "^0.12.3",
-    "graphql-tools": "^2.19.0",
-    "material-ui": "^1.0.0-beta.31",
-    "material-ui-icons": "^1.0.0-beta.17",
-    "mongoose": "^5.0.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
-    "redux": "^3.7.2",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "graphiql": "^0.11.11",
+    "graphql": "0.11.7",
+    "graphql-tools": "^2.20.0",
+    "material-ui": "^0.20.0",
+    "react": "^16.2.0"
   },
   "devDependencies": {
-    "nodemon": "^1.14.11"
+    "apollo-server": "^0.3.3",
+    "async": "^2.6.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "css-loader": "^0.28.9",
+    "express-react-views": "^0.10.5",
+    "mongoose": "^5.0.3",
+    "nodemon": "^1.14.12",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "style-loader": "^0.20.1",
+    "webpack": "^3.10.0"
   }
 }
