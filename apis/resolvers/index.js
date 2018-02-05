@@ -22,6 +22,11 @@ const resolveFunctions = {
         addList(_, {input}, ctx) {
             const list = new ListConnector.List();
             return list.addList(input.title, input.parentId);
+        },
+
+        addCard(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.addCardToList(input);
         }
     }
 };

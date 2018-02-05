@@ -26,9 +26,15 @@ const typeDefs = `
         parentId: String!
     }
 
+    input CardInput {
+        title: String!
+        listId: String!
+    }
+
     type Mutation {
-        addBoard(title: String): Board
+        addBoard(title: String!): Board
         addList(input: ListInput): Lists
+        addCard(input: CardInput): Cards
     }
     
     schema {
