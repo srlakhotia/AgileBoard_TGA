@@ -9,6 +9,18 @@ class List {
             });
             return listColln;
         };
+
+        this.addList = (title, parentId) => {
+            const id = mongoose.Types.ObjectId(parentId);
+            const listData = ListModel.insertMany([{title: title, parentId: id, cards: []}], (err, data) => {
+                if(err) {
+                    return err;
+                }
+                return data;
+            });
+
+            return listData;
+        }
     }
 }
 

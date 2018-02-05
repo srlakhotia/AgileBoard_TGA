@@ -17,6 +17,11 @@ const resolveFunctions = {
         addBoard(_, {title}, ctx) {
             const board = new BoardConnector.Board();
             return board.addBoard(title);
+        },
+
+        addList(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.addList(input.title, input.parentId);
         }
     }
 };
