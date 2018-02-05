@@ -47,10 +47,10 @@ export default class Board extends Component {
         });
         return (
             <div>
-                <GridList cols={2.2}>
+                <GridList cols={4.4}>
                     {listMap}
                 </GridList>
-                <AddItem context={this.state.context}></AddItem>
+                <AddItem context={this.state.context} parentId={this.props.match.params.boardId}></AddItem>
             </div>
         )
     }

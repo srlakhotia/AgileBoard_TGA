@@ -24,12 +24,10 @@ export default class BoardContainer extends Component {
                 `
             }
         }).then(result => {
-            console.log('result:: ', result);
             let boards = result.data.boards || [];
             this.setState({
                 boardList: boards
             });
-            console.log('boards::; ', boards)
         }).catch(err => {
             console.error('err:: ', err);
         });

@@ -31,8 +31,12 @@ const typeDefs = `
         listId: String!
     }
 
+    input BoardInput {
+        title: String!
+    }
+
     type Mutation {
-        addBoard(title: String!): Board
+        addBoard(input: BoardInput): Board
         addList(input: ListInput): Lists
         addCard(input: CardInput): Cards
     }

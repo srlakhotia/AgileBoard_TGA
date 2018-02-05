@@ -12,8 +12,8 @@ class Board {
             return boardColln;
         };
 
-        this.addBoard = (title) => {
-            const boardData = BoardModel.insertMany([{title: title}], (err, data) => {
+        this.addBoard = (input) => {
+            const boardData = BoardModel.insertMany([{title: input.title}], (err, data) => {
                 if(err) {
                     return err;
                 }

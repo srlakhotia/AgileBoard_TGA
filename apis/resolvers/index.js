@@ -14,9 +14,9 @@ const resolveFunctions = {
         }
     },
     Mutation: {
-        addBoard(_, {title}, ctx) {
+        addBoard(_, {input}, ctx) {
             const board = new BoardConnector.Board();
-            return board.addBoard(title);
+            return board.addBoard(input);
         },
 
         addList(_, {input}, ctx) {
