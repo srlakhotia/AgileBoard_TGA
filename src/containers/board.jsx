@@ -19,6 +19,19 @@ export default class Board extends Component {
             lists.push(newList);
             this.setState(lists);
         }
+
+        this.styles = {
+            listContainer: {
+                display: 'inline-block',
+                width: '20%',
+                margin: '3%',
+                padding: '1%',
+                backgroundColor: '#e0f7f2',
+                boxShadow: '0px 0px 4px 0px #5d6f6b',
+                borderRadius: '4px',
+                position: 'relative'
+            }
+        };
     }
 
     componentDidMount() {
@@ -48,16 +61,18 @@ export default class Board extends Component {
 
     render() {
         let listMap = this.state.lists.map((list, idx) => {
-            return (<GridTile key={idx}>
+            return (<li style={this.styles.listContainer} key={idx}>
                     <ListCard listDetails={list}></ListCard>
-                </GridTile>);
+                </li>);
         });
         return (
             <div>
-                <GridList cols={4.4}>
+                <ul>
                     {listMap}
-                </GridList>
-                <AddItem context={this.state.context} updateState={(evt) => this.addNewList(evt)} parentId={this.props.match.params.boardId}></AddItem>
+                </ul>
+                <div className="fab">
+                    <AddItem context={this.state.context} updateState={(evt) => this.addNewList(evt)} parentId={this.props.match.params.boardId}></AddItem>
+                </div>
             </div>
         )
     }

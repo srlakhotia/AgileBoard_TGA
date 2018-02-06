@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import AppHeaderBar from './containers/app.header.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {BrowserRouter as Router} from 'react-router-dom';
+import './main.css';
 
 const App = () => {
     return (

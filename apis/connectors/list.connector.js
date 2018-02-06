@@ -1,5 +1,6 @@
 const ListModel = require('../models/list.model');
 const mongoose = require('mongoose');
+
 class List {
     constructor() {
         this.findLists = (boardId) => {

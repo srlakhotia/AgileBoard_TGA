@@ -19,6 +19,22 @@ export default class BoardContainer extends Component {
                 boardList: boardlist
             });
         };
+
+        this.styles = {
+            boardList: {
+
+            },
+            boardItem: {
+                listStyleType: "none",
+                display: 'inline-block',
+                width: '20%',
+                margin: '3%',
+                padding: '1%',
+                backgroundColor: '#e0f7f2',
+                boxShadow: '0px 0px 4px 0px #5d6f6b',
+                borderRadius: '4px'
+            }
+        }
     }
     
     componentDidMount() {
@@ -44,16 +60,18 @@ export default class BoardContainer extends Component {
     render() {
         let boardMap = this.state.boardList.map((board) => {
             const boardPath = `/board/${board._id}`;
-            return (<li key={board._id}>
+            return (<li key={board._id} style={this.styles.boardItem}>
                 <BoardCard boardDetails={board}></BoardCard>
             </li>);
         });
         return (
             <div>
-                <ul>
+                <ul style={this.styles.boardList}>
                     {boardMap}
                 </ul>
-                <AddItem context={this.state.context} updateState={(evt) => this.updateWhenAdded(evt)}></AddItem>
+                <div className="fab">
+                    <AddItem context={this.state.context} updateState={(evt) => this.updateWhenAdded(evt)}></AddItem>
+                </div>
             </div>
         )
     }
