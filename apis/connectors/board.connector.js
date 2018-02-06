@@ -7,20 +7,22 @@ class Board {
                 if(err) {
                     return err;
                 }
+                console.log('data;:: ', data)
                 return data;
             });
             return boardColln;
         };
 
         this.addBoard = (input) => {
-            const boardData = BoardModel.insertMany([{title: input.title}], (err, data) => {
+            const newBoard = new BoardModel({title: input.title});
+            const boardColln = newBoard.save((err, data) => {
                 if(err) {
                     return err;
                 }
-                return data;
+                return newBoard;
             });
 
-            return boardData;
+            return newBoard;
         }
     }
 }

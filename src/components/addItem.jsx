@@ -47,11 +47,19 @@ export default class AddItem extends Component {
                     client.mutation({
                         addBoard: {
                             variables: {title: title},
-                            result: '_id'
+                            result: `
+                                _id
+                                title
+                            `
                         }
                     }).then(result => {
+                        let newData;
                         if(!result.error) {
-                            console.log('successfully added');
+                            newData = {
+                                title: result.data.addBoard.title,
+                                _id: result.data.addBoard._id
+                            }
+                            this.props.updateState(newData);
                         }
                     });
                     break;

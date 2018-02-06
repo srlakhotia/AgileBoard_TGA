@@ -11,6 +11,14 @@ export default class BoardContainer extends Component {
             boardList: [],
             context: "board"
         }
+
+        this.updateWhenAdded = (newBoard) => {
+            let boardlist = this.state.boardList;
+            boardlist.push(newBoard);
+            this.setState({
+                boardList: boardlist
+            });
+        };
     }
     
     componentDidMount() {
@@ -45,7 +53,7 @@ export default class BoardContainer extends Component {
                 <ul>
                     {boardMap}
                 </ul>
-                <AddItem context={this.state.context}></AddItem>
+                <AddItem context={this.state.context} updateState={(evt) => this.updateWhenAdded(evt)}></AddItem>
             </div>
         )
     }
