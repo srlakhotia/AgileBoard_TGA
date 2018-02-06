@@ -3626,11 +3626,18 @@ var AddItem = function (_Component) {
                                     title: title,
                                     parentId: _this.props.parentId
                                 },
-                                result: '_id'
+                                result: '\n                                _id\n                                title\n                                parentId\n                                cards {\n                                    _id\n                                    title\n                                }\n                            '
                             }
                         }).then(function (result) {
+                            var newData = void 0;
                             if (!result.error) {
-                                console.log('List successfully added');
+                                newData = {
+                                    title: result.data.addList.title,
+                                    _id: result.data.addList._id,
+                                    parentId: result.data.addList.parentId,
+                                    cards: result.data.addList.cards
+                                };
+                                _this.props.updateState(newData);
                             }
                         });
                         break;
@@ -3648,7 +3655,6 @@ var AddItem = function (_Component) {
                         }).then(function (result) {
                             var newData = void 0;
                             if (!result.error) {
-                                console.log('result:: ', result.data.addCard.cards);
                                 newData = result.data.addCard.cards;
                                 _this.props.updateState(newData);
                             }
@@ -36811,6 +36817,13 @@ var Board = function (_Component) {
             lists: [],
             context: 'list'
         };
+
+        _this.addNewList = function (newList) {
+            var lists = _this.state.lists;
+
+            lists.push(newList);
+            _this.setState(lists);
+        };
         return _this;
     }
 
@@ -36838,6 +36851,8 @@ var Board = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
+
             var listMap = this.state.lists.map(function (list, idx) {
                 return _react2.default.createElement(
                     _GridList.GridTile,
@@ -36853,7 +36868,9 @@ var Board = function (_Component) {
                     { cols: 4.4 },
                     listMap
                 ),
-                _react2.default.createElement(_addItem2.default, { context: this.state.context, parentId: this.props.match.params.boardId })
+                _react2.default.createElement(_addItem2.default, { context: this.state.context, updateState: function updateState(evt) {
+                        return _this3.addNewList(evt);
+                    }, parentId: this.props.match.params.boardId })
             );
         }
     }]);

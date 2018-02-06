@@ -35,14 +35,19 @@ class List {
 
         this.addList = (title, parentId) => {
             const id = mongoose.Types.ObjectId(parentId);
-            const listData = ListModel.insertMany([{title: title, parentId: id, cards: []}], (err, data) => {
+            const newList = new ListModel({
+                title: title,
+                parentId: id,
+                cards: []
+            });
+            const listData = newList.save([{title: title, parentId: id, cards: []}], (err, data) => {
                 if(err) {
                     return err;
                 }
-                return data;
+                return newList;
             });
 
-            return listData;
+            return newList;
         }
     }
 }

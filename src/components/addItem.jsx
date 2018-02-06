@@ -71,11 +71,26 @@ export default class AddItem extends Component {
                                 title: title,
                                 parentId: this.props.parentId
                             },
-                            result: '_id'
+                            result: `
+                                _id
+                                title
+                                parentId
+                                cards {
+                                    _id
+                                    title
+                                }
+                            `
                         }
                     }).then(result => {
+                        let newData;
                         if(!result.error) {
-                            console.log('List successfully added');
+                            newData = {
+                                title: result.data.addList.title,
+                                _id: result.data.addList._id,
+                                parentId: result.data.addList.parentId,
+                                cards: result.data.addList.cards
+                            }
+                            this.props.updateState(newData);
                         }
                     });
                     break;
@@ -97,7 +112,6 @@ export default class AddItem extends Component {
                     }).then(result => {
                         let newData;
                         if(!result.error) {
-                            console.log('result:: ', result.data.addCard.cards)
                             newData = result.data.addCard.cards;
                             this.props.updateState(newData);
                         }

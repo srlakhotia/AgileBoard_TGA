@@ -12,6 +12,13 @@ export default class Board extends Component {
             lists: [],
             context: 'list'
         }
+
+        this.addNewList = (newList) => {
+            let lists = this.state.lists;
+
+            lists.push(newList);
+            this.setState(lists);
+        }
     }
 
     componentDidMount() {
@@ -50,7 +57,7 @@ export default class Board extends Component {
                 <GridList cols={4.4}>
                     {listMap}
                 </GridList>
-                <AddItem context={this.state.context} parentId={this.props.match.params.boardId}></AddItem>
+                <AddItem context={this.state.context} updateState={(evt) => this.addNewList(evt)} parentId={this.props.match.params.boardId}></AddItem>
             </div>
         )
     }
