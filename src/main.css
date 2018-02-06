@@ -13,3 +13,7 @@ html, body {
     right: 30px;
     bottom: 30px;
 }
+
+.clearfix {
+    clear: both;
+}

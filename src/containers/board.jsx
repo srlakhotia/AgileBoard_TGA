@@ -29,40 +29,49 @@ export default class Board extends Component {
                 backgroundColor: '#e0f7f2',
                 boxShadow: '0px 0px 4px 0px #5d6f6b',
                 borderRadius: '4px',
-                position: 'relative'
+                position: 'relative',
+                verticalAlign: 'top'
             }
         };
     }
 
     componentDidMount() {
-        const client = api({url: 'http://localhost:3000/graphql'});
-
-        client.query({
-            lists: {
-               variables: {boardId: this.props.match.params.boardId},
-               result: `
-               _id
-                title
-                parentId
-                cards {
+        this.getAllLists = () => {
+            const client = api({url: 'http://localhost:3000/graphql'});
+    
+            client.query({
+                lists: {
+                   variables: {boardId: this.props.match.params.boardId},
+                   result: `
+                   _id
                     title
+                    parentId
+                    cards {
+                        _id
+                        title
+                    }
+                   `
                 }
-               `
-            }
-        }).then(result => {
-            let lists = result.data.lists || [];
-            this.setState({
-                lists: lists
+            }).then(result => {
+                let lists = []
+                // this.setState({
+                //     lists: lists
+                // });
+                // let lists ;
+                this.setState({
+                    lists: result.data.lists
+                });
+            }).catch(err => {
+                console.error('err:: ', err);
             });
-        }).catch(err => {
-            console.error('err:: ', err);
-        });
+        };
+        this.getAllLists();
     }
 
     render() {
         let listMap = this.state.lists.map((list, idx) => {
             return (<li style={this.styles.listContainer} key={idx}>
-                    <ListCard listDetails={list}></ListCard>
+                    <ListCard listDetails={list} allLists={this.state.lists} reloadLists={this.getAllLists}></ListCard>
                 </li>);
         });
         return (

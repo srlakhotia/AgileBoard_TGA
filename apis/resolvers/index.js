@@ -27,6 +27,11 @@ const resolveFunctions = {
         addCard(_, {input}, ctx) {
             const list = new ListConnector.List();
             return list.addCardToList(input);
+        },
+
+        moveCard(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.moveCard(input);
         }
     }
 };

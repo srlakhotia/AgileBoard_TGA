@@ -3,6 +3,43 @@ const mongoose = require('mongoose');
 
 class List {
     constructor() {
+        this.moveCard = (input) => {
+            const prevListId = mongoose.Types.ObjectId(input.prevListId);
+            const newListId = mongoose.Types.ObjectId(input.newListId);
+            const cardId = mongoose.Types.ObjectId(input.cardId);
+
+            let query, cardObj;
+            const listItem = ListModel.findById(prevListId, (err, data) => {
+                cardObj = data.cards.filter((card) => {
+                    return card._id.toString() == cardId.toString();
+                })[0];
+
+                query = ListModel.findByIdAndUpdate(
+                            prevListId, {
+                                $pull: {
+                                    cards: {
+                                        "_id": cardId
+                                    }
+                                }
+                            }, {new: true});
+                return query
+                    .exec()
+                    .then(() => {
+                        const addQuery = ListModel.findByIdAndUpdate(
+                            newListId,{
+                                $push: {
+                                cards: cardObj
+                                }
+                            },
+                            {new: true}
+                        );
+
+                        return addQuery.exec();
+                    });
+            });
+            return listItem;
+        }
+
         this.findLists = (boardId) => {
             const id = mongoose.Types.ObjectId(boardId);
             const listColln = ListModel.find({"parentId": id}, (err, data) => {
