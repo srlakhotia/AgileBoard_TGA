@@ -26,16 +26,11 @@ class List {
 
         this.addCardToList = (input) => {
             const id = mongoose.Types.ObjectId(input.listId);
-            const listData = ListModel.findOneAndUpdate({"_id": id}, {$push: {cards: {
-                title: input.title
-            }}}, (err, data) => {
-                if(err) {
-                    return err;
-                }
-                return data;
-            });
+            const query =  ListModel.findOneAndUpdate({"_id": id}, {$push: {cards: {
+                                title: input.title
+                            }}}, {new: true});
 
-            return listData;
+            return query.exec();
         };
 
         this.addList = (title, parentId) => {

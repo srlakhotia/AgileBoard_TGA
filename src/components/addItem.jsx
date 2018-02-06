@@ -87,11 +87,19 @@ export default class AddItem extends Component {
                                 title: title,
                                 listId: this.props.parentId
                             },
-                            result: 'id'
+                            result: `
+                                cards {
+                                    title
+                                    _id
+                                }
+                            `
                         }
                     }).then(result => {
+                        let newData;
                         if(!result.error) {
-                            console.log('Card successfully added');
+                            console.log('result:: ', result.data.addCard.cards)
+                            newData = result.data.addCard.cards;
+                            this.props.updateState(newData);
                         }
                     });
                     break;

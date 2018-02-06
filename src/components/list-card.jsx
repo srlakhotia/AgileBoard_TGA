@@ -8,12 +8,21 @@ export default class ListCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            context: 'card'
+            context: 'card',
+            cards: this.props.listDetails.cards
         }
+
+        this.updateOnAdd = (newCardSet) => {
+            let cardList = newCardSet;
+
+            this.setState({
+                cards: cardList
+            });
+        };
     }
 
     render() {
-        const cardMap = this.props.listDetails.cards.map((card, idx) => {
+        const cardMap = this.state.cards.map((card, idx) => {
             return (<CardText key={idx}>{card.title}</CardText>);
         });
         return (<React.Fragment>
@@ -23,7 +32,7 @@ export default class ListCard extends Component {
                 </CardTitle>
                 {cardMap}
                 <CardActions>
-                    <AddItem label="Add Card" context={this.state.context} parentId={this.props.listDetails._id}></AddItem>
+                    <AddItem label="Add Card" updateState={(evt) => this.updateOnAdd(evt)} context={this.state.context} parentId={this.props.listDetails._id}></AddItem>
                     <RaisedButton label="Delete List" />
                 </CardActions>
             </Card>  

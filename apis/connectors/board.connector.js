@@ -7,7 +7,7 @@ class Board {
                 if(err) {
                     return err;
                 }
-                console.log('data;:: ', data)
+
                 return data;
             });
             return boardColln;

@@ -3643,11 +3643,14 @@ var AddItem = function (_Component) {
                                     title: title,
                                     listId: _this.props.parentId
                                 },
-                                result: 'id'
+                                result: '\n                                cards {\n                                    title\n                                    _id\n                                }\n                            '
                             }
                         }).then(function (result) {
+                            var newData = void 0;
                             if (!result.error) {
-                                console.log('Card successfully added');
+                                console.log('result:: ', result.data.addCard.cards);
+                                newData = result.data.addCard.cards;
+                                _this.props.updateState(newData);
                             }
                         });
                         break;
@@ -36906,7 +36909,16 @@ var ListCard = function (_Component) {
         var _this = _possibleConstructorReturn(this, (ListCard.__proto__ || Object.getPrototypeOf(ListCard)).call(this, props));
 
         _this.state = {
-            context: 'card'
+            context: 'card',
+            cards: _this.props.listDetails.cards
+        };
+
+        _this.updateOnAdd = function (newCardSet) {
+            var cardList = newCardSet;
+
+            _this.setState({
+                cards: cardList
+            });
         };
         return _this;
     }
@@ -36914,7 +36926,9 @@ var ListCard = function (_Component) {
     _createClass(ListCard, [{
         key: 'render',
         value: function render() {
-            var cardMap = this.props.listDetails.cards.map(function (card, idx) {
+            var _this2 = this;
+
+            var cardMap = this.state.cards.map(function (card, idx) {
                 return _react2.default.createElement(
                     _Card.CardText,
                     { key: idx },
@@ -36933,7 +36947,9 @@ var ListCard = function (_Component) {
                     _react2.default.createElement(
                         _Card.CardActions,
                         null,
-                        _react2.default.createElement(_addItem2.default, { label: 'Add Card', context: this.state.context, parentId: this.props.listDetails._id }),
+                        _react2.default.createElement(_addItem2.default, { label: 'Add Card', updateState: function updateState(evt) {
+                                return _this2.updateOnAdd(evt);
+                            }, context: this.state.context, parentId: this.props.listDetails._id }),
                         _react2.default.createElement(_RaisedButton2.default, { label: 'Delete List' })
                     )
                 )

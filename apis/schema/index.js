@@ -6,7 +6,7 @@ const typeDefs = `
 
     type Cards {
         title: String
-        id: ID
+        _id: ID
     }
 
     type Lists {
@@ -38,7 +38,7 @@ const typeDefs = `
     type Mutation {
         addBoard(input: BoardInput): Board
         addList(input: ListInput): Lists
-        addCard(input: CardInput): Cards
+        addCard(input: CardInput): Lists
     }
     
     schema {
