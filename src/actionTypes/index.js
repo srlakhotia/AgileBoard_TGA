@@ -1,0 +1,9 @@
+let ADD_LIST = "ADD_LIST";
+let ADD_BOARD = "ADD_BOARD";
+let GET_ALL_BOARD = "GET_ALL_BOARD";
+
+export {
+  ADD_LIST,
+  ADD_BOARD,
+  GET_ALL_BOARD
+}

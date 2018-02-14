@@ -7,17 +7,18 @@ import api, {GraphQLCall} from 'graphql-call';
 export default class BoardContainer extends Component {
     constructor(props) {
         super(props);
+        console.log('this.props;ddd: ', this.props.boardList)
         this.state = {
-            boardList: [],
+            // boardList: [],
             context: "board"
         }
 
         this.updateWhenAdded = (newBoard) => {
-            let boardlist = this.state.boardList;
-            boardlist.push(newBoard);
-            this.setState({
-                boardList: boardlist
-            });
+            // let boardlist = this.state.boardList;
+            // boardlist.push(newBoard);
+            // this.setState({
+            //     boardList: boardlist
+            // });
         };
 
         this.styles = {
@@ -38,27 +39,11 @@ export default class BoardContainer extends Component {
     }
     
     componentDidMount() {
-        let client = api({url: 'http://localhost:3000/graphql'});
-
-        client.query({
-            boards: {
-                result: `
-                _id
-                title
-                `
-            }
-        }).then(result => {
-            let boards = result.data.boards || [];
-            this.setState({
-                boardList: boards
-            });
-        }).catch(err => {
-            console.error('err:: ', err);
-        });
+        this.props.getAllBoards();
     }
 
     render() {
-        let boardMap = this.state.boardList.map((board) => {
+        let boardMap = this.props.boardList.map((board) => {
             const boardPath = `/board/${board._id}`;
             return (<li key={board._id} style={this.styles.boardItem}>
                 <BoardCard boardDetails={board}></BoardCard>
