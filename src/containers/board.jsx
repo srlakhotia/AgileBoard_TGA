@@ -9,16 +9,10 @@ export default class Board extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            lists: [],
             context: 'list'
         }
 
-        this.addNewList = (newList) => {
-            let lists = this.state.lists;
-
-            lists.push(newList);
-            this.setState(lists);
-        }
+        this.addNewList = (newList) => {}
 
         this.styles = {
             listContainer: {
@@ -37,41 +31,15 @@ export default class Board extends Component {
 
     componentDidMount() {
         this.getAllLists = () => {
-            const client = api({url: 'http://localhost:3000/graphql'});
-    
-            client.query({
-                lists: {
-                   variables: {boardId: this.props.match.params.boardId},
-                   result: `
-                   _id
-                    title
-                    parentId
-                    cards {
-                        _id
-                        title
-                    }
-                   `
-                }
-            }).then(result => {
-                let lists = []
-                // this.setState({
-                //     lists: lists
-                // });
-                // let lists ;
-                this.setState({
-                    lists: result.data.lists
-                });
-            }).catch(err => {
-                console.error('err:: ', err);
-            });
+            this.props.getAllLists(this.props.match.params.boardId);
         };
         this.getAllLists();
     }
 
     render() {
-        let listMap = this.state.lists.map((list, idx) => {
+        let listMap = this.props.lists.map((list, idx) => {
             return (<li style={this.styles.listContainer} key={idx}>
-                    <ListCard listDetails={list} allLists={this.state.lists} reloadLists={this.getAllLists}></ListCard>
+                    <ListCard listDetails={list} allLists={this.props.lists} reloadLists={this.getAllLists}></ListCard>
                 </li>);
         });
         return (

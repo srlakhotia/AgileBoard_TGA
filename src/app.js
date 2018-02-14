@@ -30,6 +30,8 @@ class App extends Component {
                         <Route exact path="/board/:boardId"
                             render={(props) =>
                                 <Board {...props}
+                                    getAllLists={this.props.getAllLists}
+                                    lists={this.props.listCollection}
                                 />} >
                         </Route>     
                     </React.Fragment>
@@ -56,6 +58,9 @@ const mapDispachToProps = (dispatch, ownProps) => {
         },
         getAllBoards: () => {
             dispatch(Actions.getAllBoards());
+        },
+        getAllLists: (boardId) => {
+            dispatch(Actions.getLists(boardId));
         }
     }
 };

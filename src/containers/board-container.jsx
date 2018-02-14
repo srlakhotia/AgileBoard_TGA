@@ -44,7 +44,6 @@ export default class BoardContainer extends Component {
 
     render() {
         let boardMap = this.props.boardList.map((board) => {
-            const boardPath = `/board/${board._id}`;
             return (<li key={board._id} style={this.styles.boardItem}>
                 <BoardCard boardDetails={board}></BoardCard>
             </li>);

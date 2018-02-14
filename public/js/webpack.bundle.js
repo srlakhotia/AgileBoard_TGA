@@ -4961,10 +4961,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var ADD_LIST = "ADD_LIST";
+var GET_LISTS = "GET_LISTS";
+
 var ADD_BOARD = "ADD_BOARD";
 var GET_ALL_BOARD = "GET_ALL_BOARD";
 
 exports.ADD_LIST = ADD_LIST;
+exports.GET_LISTS = GET_LISTS;
 exports.ADD_BOARD = ADD_BOARD;
 exports.GET_ALL_BOARD = GET_ALL_BOARD;
 
@@ -26852,20 +26855,25 @@ exports.default = function (prevState, action) {
                 console.log('adding board');
                 return prevState;
             }
-        case _actionTypes.ADD_LIST:
-            {
-                console.log('adding list');
-                return prevState;
-            }
         case _actionTypes.GET_ALL_BOARD:
             {
                 return Object.assign({}, prevState, {
                     boardCollection: action.payload.result.data.boards
                 });
             }
+        case _actionTypes.GET_LISTS:
+            {
+                return Object.assign({}, prevState, {
+                    listCollection: action.payload.result.data.lists
+                });
+            }
+        case _actionTypes.ADD_LIST:
+            {
+                console.log('adding list');
+                return prevState;
+            }
         default:
             {
-                console.log('default reducer operation');
                 return prevState;
             }
     }
@@ -28714,7 +28722,10 @@ var App = function (_Component) {
                             } }),
                         _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/board/:boardId',
                             render: function render(props) {
-                                return _react2.default.createElement(_board2.default, props);
+                                return _react2.default.createElement(_board2.default, _extends({}, props, {
+                                    getAllLists: _this2.props.getAllLists,
+                                    lists: _this2.props.listCollection
+                                }));
                             } })
                     )
                 )
@@ -28742,6 +28753,9 @@ var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
         },
         getAllBoards: function getAllBoards() {
             dispatch(Actions.getAllBoards());
+        },
+        getAllLists: function getAllLists(boardId) {
+            dispatch(Actions.getLists(boardId));
         }
     };
 };
@@ -40340,7 +40354,6 @@ var BoardContainer = function (_Component) {
             var _this2 = this;
 
             var boardMap = this.props.boardList.map(function (board) {
-                var boardPath = '/board/' + board._id;
                 return _react2.default.createElement(
                     'li',
                     { key: board._id, style: _this2.styles.boardItem },
@@ -44546,16 +44559,10 @@ var Board = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).call(this, props));
 
         _this.state = {
-            lists: [],
             context: 'list'
         };
 
-        _this.addNewList = function (newList) {
-            var lists = _this.state.lists;
-
-            lists.push(newList);
-            _this.setState(lists);
-        };
+        _this.addNewList = function (newList) {};
 
         _this.styles = {
             listContainer: {
@@ -44579,25 +44586,7 @@ var Board = function (_Component) {
             var _this2 = this;
 
             this.getAllLists = function () {
-                var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
-
-                client.query({
-                    lists: {
-                        variables: { boardId: _this2.props.match.params.boardId },
-                        result: '\n                   _id\n                    title\n                    parentId\n                    cards {\n                        _id\n                        title\n                    }\n                   '
-                    }
-                }).then(function (result) {
-                    var lists = [];
-                    // this.setState({
-                    //     lists: lists
-                    // });
-                    // let lists ;
-                    _this2.setState({
-                        lists: result.data.lists
-                    });
-                }).catch(function (err) {
-                    console.error('err:: ', err);
-                });
+                _this2.props.getAllLists(_this2.props.match.params.boardId);
             };
             this.getAllLists();
         }
@@ -44606,11 +44595,11 @@ var Board = function (_Component) {
         value: function render() {
             var _this3 = this;
 
-            var listMap = this.state.lists.map(function (list, idx) {
+            var listMap = this.props.lists.map(function (list, idx) {
                 return _react2.default.createElement(
                     'li',
                     { style: _this3.styles.listContainer, key: idx },
-                    _react2.default.createElement(_listCard2.default, { listDetails: list, allLists: _this3.state.lists, reloadLists: _this3.getAllLists })
+                    _react2.default.createElement(_listCard2.default, { listDetails: list, allLists: _this3.props.lists, reloadLists: _this3.getAllLists })
                 );
             });
             return _react2.default.createElement(
@@ -48710,68 +48699,16 @@ exports.default = function (obj, key, value) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getAllBoards = exports.onAddList = exports.onAddBoard = undefined;
+exports.onAddBoard = exports.getAllBoards = exports.getLists = exports.onAddList = undefined;
 
-var _actionTypes = __webpack_require__(97);
+var _boardActions = __webpack_require__(365);
 
-__webpack_require__(52);
+var _listActions = __webpack_require__(366);
 
-var _graphqlCall = __webpack_require__(53);
-
-var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function onAddBoard(newBoard) {
-    var action = {
-        type: _actionTypes.ADD_BOARD,
-        payload: {
-            newBoard: newBoard
-        },
-        error: false
-    };
-
-    return action;
-}
-
-function onAddList(newList) {
-    var action = {
-        type: _actionTypes.ADD_LIST,
-        payload: {
-            newList: newList
-        },
-        error: false
-    };
-
-    return action;
-}
-
-function getAllBoards() {
-    var action = {};
-
-    var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
-
-    return function (dispatch) {
-        client.query({
-            boards: {
-                result: '\n                _id\n                title\n                '
-            }
-        }).then(function (result) {
-            action = {
-                type: _actionTypes.GET_ALL_BOARD,
-                payload: { result: result },
-                error: false
-            };
-            dispatch(action);
-        }).catch(function (err) {
-            console.error('err:: ', err);
-        });
-    };
-}
-
-exports.onAddBoard = onAddBoard;
-exports.onAddList = onAddList;
-exports.getAllBoards = getAllBoards;
+exports.onAddList = _listActions.onAddList;
+exports.getLists = _listActions.getLists;
+exports.getAllBoards = _boardActions.getAllBoards;
+exports.onAddBoard = _boardActions.onAddBoard;
 
 /***/ }),
 /* 364 */
@@ -48801,6 +48738,127 @@ var thunk = createThunkMiddleware();
 thunk.withExtraArgument = createThunkMiddleware;
 
 exports['default'] = thunk;
+
+/***/ }),
+/* 365 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getAllBoards = exports.onAddBoard = undefined;
+
+var _actionTypes = __webpack_require__(97);
+
+__webpack_require__(52);
+
+var _graphqlCall = __webpack_require__(53);
+
+var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
+
+function onAddBoard(newBoard) {
+    var action = {
+        type: _actionTypes.ADD_BOARD,
+        payload: {
+            newBoard: newBoard
+        },
+        error: false
+    };
+
+    return action;
+}
+
+function getAllBoards() {
+    var action = {};
+
+    return function (dispatch) {
+        client.query({
+            boards: {
+                result: '\n                _id\n                title\n                '
+            }
+        }).then(function (result) {
+            action = {
+                type: _actionTypes.GET_ALL_BOARD,
+                payload: { result: result },
+                error: false
+            };
+            dispatch(action);
+        }).catch(function (err) {
+            console.error('err:: ', err);
+        });
+    };
+}
+
+exports.onAddBoard = onAddBoard;
+exports.getAllBoards = getAllBoards;
+
+/***/ }),
+/* 366 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getLists = exports.onAddList = undefined;
+
+__webpack_require__(52);
+
+var _graphqlCall = __webpack_require__(53);
+
+var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
+
+var _actionTypes = __webpack_require__(97);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
+
+function getLists(boardId) {
+
+    var action = {};
+    return function (dispatch) {
+        return client.query({
+            lists: {
+                variables: { boardId: boardId },
+                result: '\n           _id\n            title\n            parentId\n            cards {\n                _id\n                title\n            }\n           '
+            }
+        }).then(function (result) {
+            action = {
+                type: _actionTypes.GET_LISTS,
+                payload: { result: result },
+                error: false
+            };
+            dispatch(action);
+        }).catch(function (err) {
+            console.error('err:: ', err);
+        });
+    };
+}
+
+function onAddList(newList) {
+    var action = {
+        type: _actionTypes.ADD_LIST,
+        payload: {
+            newList: newList
+        },
+        error: false
+    };
+
+    return action;
+}
+
+exports.onAddList = onAddList;
+exports.getLists = getLists;
 
 /***/ })
 /******/ ]);
