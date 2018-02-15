@@ -24,6 +24,8 @@ class App extends Component {
                             render={(props) =>
                             <BoardContainer {...props}
                                 getAllBoards={this.props.getAllBoards}
+                                onAddBoard={this.props.onAddBoard}
+
                                 boardList={this.props.boardCollection} 
                             />} >
                         </Route>
@@ -50,7 +52,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispachToProps = (dispatch, ownProps) => {
     return {
-        onBoardAdd: (boardTitle) => {
+        onAddBoard: (boardTitle) => {
             dispatch(Actions.onAddBoard(boardTitle));
         },
         onListAdd: (listTitle) => {
@@ -61,6 +63,12 @@ const mapDispachToProps = (dispatch, ownProps) => {
         },
         getAllLists: (boardId) => {
             dispatch(Actions.getLists(boardId));
+        },
+        onAddCard: (cardTitle, listId) => {
+            dispatch(Actions.onAddCard(cardTitle, listId));
+        },
+        onMoveCard: (prevListId, newListId, cardId) => {
+            dispatch(Actions.onMoveCard(prevListId, newListId, cardId));
         }
     }
 };

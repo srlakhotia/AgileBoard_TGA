@@ -4380,21 +4380,7 @@ var AddItem = function (_Component) {
             switch (_this.props.context) {
                 case 'board':
                     {
-                        client.mutation({
-                            addBoard: {
-                                variables: { title: title },
-                                result: '\n                                _id\n                                title\n                            '
-                            }
-                        }).then(function (result) {
-                            var newData = void 0;
-                            if (!result.error) {
-                                newData = {
-                                    title: result.data.addBoard.title,
-                                    _id: result.data.addBoard._id
-                                };
-                                _this.props.updateState(newData);
-                            }
-                        });
+                        _this.props.onAddBoard(title);
                         break;
                     }
                 case 'list':
@@ -26856,8 +26842,11 @@ exports.default = function (prevState, action) {
     switch (action.type) {
         case _actionTypes.ADD_BOARD:
             {
+                prevState.boardCollection.push(action.payload.result.data.addBoard);
+                var newCollection = prevState.boardCollection;
+
                 return Object.assign({}, prevState, {
-                    boardCollection: action.payload.result.data.addBoard
+                    boardCollection: newCollection
                 });
             }
 
@@ -26878,6 +26867,18 @@ exports.default = function (prevState, action) {
         case _actionTypes.ADD_LIST:
             {
                 console.log('adding list');
+                return prevState;
+            }
+
+        case _actionTypes.ADD_CARD:
+            {
+                console.log('adding card');
+                return prevState;
+            }
+
+        case _actionTypes.MOVE_CARD:
+            {
+                console.log('move card');
                 return prevState;
             }
 
@@ -28755,6 +28756,8 @@ var App = function (_Component) {
                             render: function render(props) {
                                 return _react2.default.createElement(_boardContainer2.default, _extends({}, props, {
                                     getAllBoards: _this2.props.getAllBoards,
+                                    onAddBoard: _this2.props.onAddBoard,
+
                                     boardList: _this2.props.boardCollection
                                 }));
                             } }),
@@ -28783,7 +28786,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
 
 var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
     return {
-        onBoardAdd: function onBoardAdd(boardTitle) {
+        onAddBoard: function onAddBoard(boardTitle) {
             dispatch(Actions.onAddBoard(boardTitle));
         },
         onListAdd: function onListAdd(listTitle) {
@@ -28794,6 +28797,12 @@ var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
         },
         getAllLists: function getAllLists(boardId) {
             dispatch(Actions.getLists(boardId));
+        },
+        onAddCard: function onAddCard(cardTitle, listId) {
+            dispatch(Actions.onAddCard(cardTitle, listId));
+        },
+        onMoveCard: function onMoveCard(prevListId, newListId, cardId) {
+            dispatch(Actions.onMoveCard(prevListId, newListId, cardId));
         }
     };
 };
@@ -40329,12 +40338,6 @@ var _boardCard = __webpack_require__(337);
 
 var _boardCard2 = _interopRequireDefault(_boardCard);
 
-__webpack_require__(35);
-
-var _graphqlCall = __webpack_require__(36);
-
-var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40351,18 +40354,8 @@ var BoardContainer = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (BoardContainer.__proto__ || Object.getPrototypeOf(BoardContainer)).call(this, props));
 
-        console.log('this.props;ddd: ', _this.props.boardList);
         _this.state = {
-            // boardList: [],
             context: "board"
-        };
-
-        _this.updateWhenAdded = function (newBoard) {
-            // let boardlist = this.state.boardList;
-            // boardlist.push(newBoard);
-            // this.setState({
-            //     boardList: boardlist
-            // });
         };
 
         _this.styles = {
@@ -40411,9 +40404,7 @@ var BoardContainer = function (_Component) {
                     { className: 'fab' },
                     _react2.default.createElement(_addItem2.default, {
                         context: this.state.context,
-                        updateState: function updateState(evt) {
-                            return _this2.updateWhenAdded(evt);
-                        }
+                        onAddBoard: this.props.onAddBoard
                     })
                 )
             );

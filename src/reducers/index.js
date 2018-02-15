@@ -11,8 +11,11 @@ import {
 export default (prevState, action) => {
     switch (action.type) {
         case ADD_BOARD: {
+            prevState.boardCollection.push(action.payload.result.data.addBoard);
+            let newCollection = prevState.boardCollection;
+
             return Object.assign({}, prevState, {
-                boardCollection: action.payload.result.data.addBoard
+                boardCollection: newCollection
             });
         }
 
@@ -30,6 +33,16 @@ export default (prevState, action) => {
 
         case ADD_LIST: {
             console.log('adding list');
+            return prevState;
+        }
+
+        case ADD_CARD: {
+            console.log('adding card');
+            return prevState;
+        }
+
+        case MOVE_CARD: {
+            console.log('move card');
             return prevState;
         }
 

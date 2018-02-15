@@ -44,24 +44,7 @@ export default class AddItem extends Component {
 
             switch(this.props.context) {
                 case 'board': {
-                    client.mutation({
-                        addBoard: {
-                            variables: {title: title},
-                            result: `
-                                _id
-                                title
-                            `
-                        }
-                    }).then(result => {
-                        let newData;
-                        if(!result.error) {
-                            newData = {
-                                title: result.data.addBoard.title,
-                                _id: result.data.addBoard._id
-                            }
-                            this.props.updateState(newData);
-                        }
-                    });
+                    this.props.onAddBoard(title);
                     break;
                 }
                 case 'list': {
