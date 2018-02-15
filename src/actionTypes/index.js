@@ -1,5 +1,7 @@
 let ADD_LIST = "ADD_LIST";
 let GET_LISTS = "GET_LISTS";
+let ADD_CARD = "ADD_CARD";
+let MOVE_CARD = "MOVE_CARD";
 
 let ADD_BOARD = "ADD_BOARD";
 let GET_ALL_BOARD = "GET_ALL_BOARD";
@@ -8,6 +10,8 @@ export {
   //Lists
   ADD_LIST,
   GET_LISTS,
+  ADD_CARD,
+  MOVE_CARD,
 
   //Boards
   ADD_BOARD,

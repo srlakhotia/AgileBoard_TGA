@@ -39,7 +39,11 @@ export default class Board extends Component {
     render() {
         let listMap = this.props.lists.map((list, idx) => {
             return (<li style={this.styles.listContainer} key={idx}>
-                    <ListCard listDetails={list} allLists={this.props.lists} reloadLists={this.getAllLists}></ListCard>
+                    <ListCard
+                        listDetails={list}
+                        allLists={this.props.lists}
+                        reloadLists={this.getAllLists}
+                    ></ListCard>
                 </li>);
         });
         return (
@@ -48,7 +52,11 @@ export default class Board extends Component {
                     {listMap}
                 </ul>
                 <div className="fab">
-                    <AddItem context={this.state.context} updateState={(evt) => this.addNewList(evt)} parentId={this.props.match.params.boardId}></AddItem>
+                    <AddItem
+                        context={this.state.context}
+                        updateState={(evt) => this.addNewList(evt)}
+                        parentId={this.props.match.params.boardId}
+                    ></AddItem>
                 </div>
             </div>
         )

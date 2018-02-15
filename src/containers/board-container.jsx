@@ -54,7 +54,10 @@ export default class BoardContainer extends Component {
                     {boardMap}
                 </ul>
                 <div className="fab">
-                    <AddItem context={this.state.context} updateState={(evt) => this.updateWhenAdded(evt)}></AddItem>
+                    <AddItem
+                        context={this.state.context}
+                        updateState={(evt) => this.updateWhenAdded(evt)}
+                    ></AddItem>
                 </div>
             </div>
         )

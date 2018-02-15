@@ -146,7 +146,12 @@ export default class ListCard extends Component {
 
             <div>
                 <div style={this.styles.fabSmall}>
-                    <AddItem label="Add Card" updateState={(evt) => this.updateOnAdd(evt)} context={this.state.context} parentId={this.props.listDetails._id}></AddItem>
+                    <AddItem
+                        label="Add Card"
+                        updateState={(evt) => this.updateOnAdd(evt)}
+                        context={this.state.context}
+                        parentId={this.props.listDetails._id}
+                    ></AddItem>
                 </div>
                 <RaisedButton label="Delete List" />
             </div>
