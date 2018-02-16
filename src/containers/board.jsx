@@ -12,8 +12,6 @@ export default class Board extends Component {
             context: 'list'
         }
 
-        this.addNewList = (newList) => {}
-
         this.styles = {
             listContainer: {
                 display: 'inline-block',
@@ -30,10 +28,8 @@ export default class Board extends Component {
     }
 
     componentDidMount() {
-        this.getAllLists = () => {
-            this.props.getAllLists(this.props.match.params.boardId);
-        };
-        this.getAllLists();
+        this.props.getAllLists(this.props.match.params.boardId);
+
     }
 
     render() {
@@ -42,7 +38,9 @@ export default class Board extends Component {
                     <ListCard
                         listDetails={list}
                         allLists={this.props.lists}
-                        reloadLists={this.getAllLists}
+
+                        onAddCard={this.props.onAddCard}
+                        onMoveCard={this.props.onMoveCard}
                     ></ListCard>
                 </li>);
         });
@@ -54,7 +52,7 @@ export default class Board extends Component {
                 <div className="fab">
                     <AddItem
                         context={this.state.context}
-                        updateState={(evt) => this.addNewList(evt)}
+                        onAddList={this.props.onAddList}
                         parentId={this.props.match.params.boardId}
                     ></AddItem>
                 </div>

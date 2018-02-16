@@ -33,6 +33,10 @@ class App extends Component {
                             render={(props) =>
                                 <Board {...props}
                                     getAllLists={this.props.getAllLists}
+                                    onAddList={this.props.onAddList}
+                                    onAddCard={this.props.onAddCard}
+                                    onMoveCard={this.props.onMoveCard}
+
                                     lists={this.props.listCollection}
                                 />} >
                         </Route>     
@@ -55,8 +59,8 @@ const mapDispachToProps = (dispatch, ownProps) => {
         onAddBoard: (boardTitle) => {
             dispatch(Actions.onAddBoard(boardTitle));
         },
-        onListAdd: (listTitle) => {
-            dispatch(Actions.onAddList(listTitle));
+        onAddList: (listTitle, boardId) => {
+            dispatch(Actions.onAddList(listTitle, boardId));
         },
         getAllBoards: () => {
             dispatch(Actions.getAllBoards());

@@ -13,7 +13,7 @@ export default (prevState, action) => {
         case ADD_BOARD: {
             prevState.boardCollection.push(action.payload.result.data.addBoard);
             let newCollection = prevState.boardCollection;
-
+            
             return Object.assign({}, prevState, {
                 boardCollection: newCollection
             });
@@ -32,13 +32,25 @@ export default (prevState, action) => {
         }
 
         case ADD_LIST: {
-            console.log('adding list');
-            return prevState;
+            prevState.listCollection.push(action.payload.result.data.addList);
+            let newCollection = prevState.listCollection;
+            
+            return Object.assign({}, prevState, {
+                listCollection: newCollection
+            });
         }
 
         case ADD_CARD: {
-            console.log('adding card');
-            return prevState;
+            let newCollection = prevState.listCollection.filter((list) => {
+                if(list._id == action.payload.listId) {
+                    list.cards = action.payload.result.data.addCard.cards
+                }
+                return true;
+            });
+
+            return Object.assign({}, prevState, {
+                listCollection: newCollection
+            });
         }
 
         case MOVE_CARD: {

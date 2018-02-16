@@ -37,13 +37,13 @@ function getLists(boardId) {
 
 }
 
-function onAddList(newList, boardId) {
+function onAddList(newListTitle, boardId) {
     let action = {};
 
     return dispatch => client.mutation({
         addList: {
             variables: {
-                title: title,
+                title: newListTitle,
                 parentId: boardId
             },
             result: `
@@ -59,7 +59,9 @@ function onAddList(newList, boardId) {
     }).then(result => {
         action = {
             type: ADD_LIST,
-            payload: {result},
+            payload: {
+                result
+            },
             error: false
         }
 
@@ -86,7 +88,10 @@ function onAddCard(cardTitle, listId) {
         }).then(result => {
             action =  {
                 type: ADD_CARD,
-                payload: {result},
+                payload: {
+                    result: result,
+                    listId: listId
+                },
                 error: false
             };
             dispatch(action);
@@ -107,14 +112,25 @@ function onMoveCard(prevListId, newListId, cardId) {
             },
             result: `
                 _id
+                title
+                parentId
+                cards {
+                    title
+                    _id
+                }
             `
         }
     }).then(result => {
         action = {
             type: MOVE_CARD,
-            payload: {result},
+            payload: {
+                result: result,
+                prevListId: prevListId,
+                newListId: newListId
+            },
             error: false
         }
+        dispatch(action);
     });
 }
 

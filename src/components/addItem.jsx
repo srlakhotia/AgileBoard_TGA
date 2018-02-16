@@ -48,57 +48,11 @@ export default class AddItem extends Component {
                     break;
                 }
                 case 'list': {
-                    client.mutation({
-                        addList: {
-                            variables: {
-                                title: title,
-                                parentId: this.props.parentId
-                            },
-                            result: `
-                                _id
-                                title
-                                parentId
-                                cards {
-                                    _id
-                                    title
-                                }
-                            `
-                        }
-                    }).then(result => {
-                        let newData;
-                        if(!result.error) {
-                            newData = {
-                                title: result.data.addList.title,
-                                _id: result.data.addList._id,
-                                parentId: result.data.addList.parentId,
-                                cards: result.data.addList.cards
-                            }
-                            this.props.updateState(newData);
-                        }
-                    });
+                    this.props.onAddList(title, this.props.parentId);
                     break;
                 }
                 case 'card': {
-                    client.mutation({
-                        addCard: {
-                            variables: {
-                                title: title,
-                                listId: this.props.parentId
-                            },
-                            result: `
-                                cards {
-                                    title
-                                    _id
-                                }
-                            `
-                        }
-                    }).then(result => {
-                        let newData;
-                        if(!result.error) {
-                            newData = result.data.addCard.cards;
-                            this.props.updateState(newData);
-                        }
-                    });
+                    this.props.onAddCard(title, this.props.parentId);
                     break;
                 }
                 default: {
