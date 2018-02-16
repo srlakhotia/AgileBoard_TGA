@@ -45,7 +45,7 @@ const typeDefs = `
         addBoard(input: BoardInput): Board
         addList(input: ListInput): Lists
         addCard(input: CardInput): Lists
-        moveCard(input: MoveCardInput): Lists
+        moveCard(input: MoveCardInput): [Lists]
     }
     
     schema {

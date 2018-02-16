@@ -52,8 +52,10 @@ export default (prevState, action) => {
         }
 
         case MOVE_CARD: {
-            console.log('move card');
-            return prevState;
+            console.log('action.payload.result.data.moveCard:: ', action.payload.result.data.moveCard)
+            return Object.assign({}, prevState, {
+                listCollection: action.payload.result.data.moveCard
+            });
         }
 
         default: {

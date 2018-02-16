@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "apollo-server": "^0.3.3",
-    "async": "^2.6.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-react": "^6.24.1",

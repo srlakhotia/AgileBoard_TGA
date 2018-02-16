@@ -74,6 +74,7 @@ export default class AddItem extends Component {
             />,
             <RaisedButton
               label="Add"
+              type="submit"
               primary={true}
               onClick={(ev) => {this.closeDialog(ev, true);}}
             />,
