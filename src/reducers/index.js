@@ -11,9 +11,8 @@ import {
 export default (prevState, action) => {
     switch (action.type) {
         case ADD_BOARD: {
-            prevState.boardCollection.push(action.payload.result.data.addBoard);
-            let newCollection = prevState;
-            
+            let newCollection = [...prevState.boardCollection, action.payload.result.data.addBoard];
+
             return Object.assign({}, prevState, {
                 boardCollection: newCollection
             });
@@ -32,8 +31,7 @@ export default (prevState, action) => {
         }
 
         case ADD_LIST: {
-            prevState.listCollection.push(action.payload.result.data.addList);
-            let newCollection = prevState.listCollection;
+            let newCollection = [...prevState.listCollection, action.payload.result.data.addList];
             
             return Object.assign({}, prevState, {
                 listCollection: newCollection

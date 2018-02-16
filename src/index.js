@@ -8,10 +8,8 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import App from './app';
 
-let store = createStore(ActionReducers, {
-    boardCollection: [],
-    listCollection: []
-}, applyMiddleware(thunk));
+let store = createStore(ActionReducers,{boardCollection: [],listCollection: []},applyMiddleware(thunk));
+
 
 ReactDOM.render(
     <Provider store={store}>
