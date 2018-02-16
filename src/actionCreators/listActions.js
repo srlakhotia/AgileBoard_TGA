@@ -66,6 +66,8 @@ function onAddList(newListTitle, boardId) {
         }
 
         dispatch(action);
+    }).catch(err => {
+        console.error('error:: ', err)
     });
 }
 
@@ -131,6 +133,8 @@ function onMoveCard(prevListId, newListId, cardId) {
             error: false
         }
         dispatch(action);
+    }).catch(err => {
+        console.error('error:: ', err)
     });
 }
 

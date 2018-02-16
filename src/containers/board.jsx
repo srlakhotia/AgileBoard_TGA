@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import 'isomorphic-fetch';
-import api, {GraphQLCall} from 'graphql-call';
 import AddItem from '../components/addItem.jsx';
 import ListCard from '../components/list-card.jsx';
 import {GridList, GridTile} from 'material-ui/GridList';
@@ -52,8 +50,9 @@ export default class Board extends Component {
                 <div className="fab">
                     <AddItem
                         context={this.state.context}
-                        onAddList={this.props.onAddList}
                         parentId={this.props.match.params.boardId}
+
+                        onAddList={this.props.onAddList}
                     ></AddItem>
                 </div>
             </div>

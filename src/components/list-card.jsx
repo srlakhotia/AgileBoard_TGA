@@ -26,9 +26,6 @@ export default class ListCard extends Component {
         };
 
         this.styles = {
-            listContainer: {},
-            cardTitle: {},
-            cardContainer: {},
             cardItem: {
                 listStyleType: 'none',
                 margin: '7px 0',
@@ -98,7 +95,7 @@ export default class ListCard extends Component {
     render() {
         const cardMap = this.props.listDetails.cards.map((card, idx) => {
             return (<li style={this.styles.cardItem} key={idx}>
-                <span style={this.styles.cardTitle}>{card.title}</span>
+                <span>{card.title}</span>
                 <span style={this.styles.moveButton}>
                     <RaisedButton secondary={true} label="Move" onClick={(ev) => this.openDialog(card)} />
                 </span>
@@ -119,11 +116,11 @@ export default class ListCard extends Component {
             />,
           ];
         return (<React.Fragment>
-            <div style={this.styles.listContainer}>
-                <div style={this.styles.cardTitle}>
+            <div>
+                <div>
                     <h3>{this.props.listDetails.title}</h3>
                 </div>
-                <ul style={this.styles.cardContainer}>{cardMap}</ul>
+                <ul>{cardMap}</ul>
             </div>
 
             <div>

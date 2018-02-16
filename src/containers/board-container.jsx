@@ -11,9 +11,6 @@ export default class BoardContainer extends Component {
         }
 
         this.styles = {
-            boardList: {
-
-            },
             boardItem: {
                 listStyleType: "none",
                 display: 'inline-block',
@@ -39,7 +36,7 @@ export default class BoardContainer extends Component {
         });
         return (
             <div>
-                <ul style={this.styles.boardList}>
+                <ul>
                     {boardMap}
                 </ul>
                 <div className="fab">

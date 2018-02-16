@@ -4385,45 +4385,12 @@ var AddItem = function (_Component) {
                     }
                 case 'list':
                     {
-                        client.mutation({
-                            addList: {
-                                variables: {
-                                    title: title,
-                                    parentId: _this.props.parentId
-                                },
-                                result: '\n                                _id\n                                title\n                                parentId\n                                cards {\n                                    _id\n                                    title\n                                }\n                            '
-                            }
-                        }).then(function (result) {
-                            var newData = void 0;
-                            if (!result.error) {
-                                newData = {
-                                    title: result.data.addList.title,
-                                    _id: result.data.addList._id,
-                                    parentId: result.data.addList.parentId,
-                                    cards: result.data.addList.cards
-                                };
-                                _this.props.updateState(newData);
-                            }
-                        });
+                        _this.props.onAddList(title, _this.props.parentId);
                         break;
                     }
                 case 'card':
                     {
-                        client.mutation({
-                            addCard: {
-                                variables: {
-                                    title: title,
-                                    listId: _this.props.parentId
-                                },
-                                result: '\n                                cards {\n                                    title\n                                    _id\n                                }\n                            '
-                            }
-                        }).then(function (result) {
-                            var newData = void 0;
-                            if (!result.error) {
-                                newData = result.data.addCard.cards;
-                                _this.props.updateState(newData);
-                            }
-                        });
+                        _this.props.onAddCard(title, _this.props.parentId);
                         break;
                     }
                 default:
@@ -4477,7 +4444,8 @@ var AddItem = function (_Component) {
                         floatingLabelText: placeholder,
                         fullWidth: true,
                         id: 'new_title',
-                        errorText: this.state.requiredError
+                        errorText: this.state.requiredError,
+                        autoFocus: true
                     })
                 )
             );
@@ -26843,7 +26811,7 @@ exports.default = function (prevState, action) {
         case _actionTypes.ADD_BOARD:
             {
                 prevState.boardCollection.push(action.payload.result.data.addBoard);
-                var newCollection = prevState.boardCollection;
+                var newCollection = prevState;
 
                 return Object.assign({}, prevState, {
                     boardCollection: newCollection
@@ -26866,14 +26834,26 @@ exports.default = function (prevState, action) {
 
         case _actionTypes.ADD_LIST:
             {
-                console.log('adding list');
-                return prevState;
+                prevState.listCollection.push(action.payload.result.data.addList);
+                var _newCollection = prevState.listCollection;
+
+                return Object.assign({}, prevState, {
+                    listCollection: _newCollection
+                });
             }
 
         case _actionTypes.ADD_CARD:
             {
-                console.log('adding card');
-                return prevState;
+                var _newCollection2 = prevState.listCollection.filter(function (list) {
+                    if (list._id == action.payload.listId) {
+                        list.cards = action.payload.result.data.addCard.cards;
+                    }
+                    return true;
+                });
+
+                return Object.assign({}, prevState, {
+                    listCollection: _newCollection2
+                });
             }
 
         case _actionTypes.MOVE_CARD:
@@ -28765,6 +28745,10 @@ var App = function (_Component) {
                             render: function render(props) {
                                 return _react2.default.createElement(_board2.default, _extends({}, props, {
                                     getAllLists: _this2.props.getAllLists,
+                                    onAddList: _this2.props.onAddList,
+                                    onAddCard: _this2.props.onAddCard,
+                                    onMoveCard: _this2.props.onMoveCard,
+
                                     lists: _this2.props.listCollection
                                 }));
                             } })
@@ -28789,8 +28773,8 @@ var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
         onAddBoard: function onAddBoard(boardTitle) {
             dispatch(Actions.onAddBoard(boardTitle));
         },
-        onListAdd: function onListAdd(listTitle) {
-            dispatch(Actions.onAddList(listTitle));
+        onAddList: function onAddList(listTitle, boardId) {
+            dispatch(Actions.onAddList(listTitle, boardId));
         },
         getAllBoards: function getAllBoards() {
             dispatch(Actions.getAllBoards());
@@ -37421,8 +37405,7 @@ var AppHeaderBar = function (_Component) {
         var _this = _possibleConstructorReturn(this, (AppHeaderBar.__proto__ || Object.getPrototypeOf(AppHeaderBar)).call(this, props));
 
         _this.state = {
-            appHeader: "Dashboard",
-            area: "dashboard"
+            appHeader: "Dashboard"
         };
         return _this;
     }
@@ -40359,7 +40342,6 @@ var BoardContainer = function (_Component) {
         };
 
         _this.styles = {
-            boardList: {},
             boardItem: {
                 listStyleType: "none",
                 display: 'inline-block',
@@ -40396,7 +40378,7 @@ var BoardContainer = function (_Component) {
                 null,
                 _react2.default.createElement(
                     'ul',
-                    { style: this.styles.boardList },
+                    null,
                     boardMap
                 ),
                 _react2.default.createElement(
@@ -44558,12 +44540,6 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(35);
-
-var _graphqlCall = __webpack_require__(36);
-
-var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
-
 var _addItem = __webpack_require__(90);
 
 var _addItem2 = _interopRequireDefault(_addItem);
@@ -44594,8 +44570,6 @@ var Board = function (_Component) {
             context: 'list'
         };
 
-        _this.addNewList = function (newList) {};
-
         _this.styles = {
             listContainer: {
                 display: 'inline-block',
@@ -44615,26 +44589,23 @@ var Board = function (_Component) {
     _createClass(Board, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
-            this.getAllLists = function () {
-                _this2.props.getAllLists(_this2.props.match.params.boardId);
-            };
-            this.getAllLists();
+            this.props.getAllLists(this.props.match.params.boardId);
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this2 = this;
 
             var listMap = this.props.lists.map(function (list, idx) {
                 return _react2.default.createElement(
                     'li',
-                    { style: _this3.styles.listContainer, key: idx },
+                    { style: _this2.styles.listContainer, key: idx },
                     _react2.default.createElement(_listCard2.default, {
                         listDetails: list,
-                        allLists: _this3.props.lists,
-                        reloadLists: _this3.getAllLists
+                        allLists: _this2.props.lists,
+
+                        onAddCard: _this2.props.onAddCard,
+                        onMoveCard: _this2.props.onMoveCard
                     })
                 );
             });
@@ -44651,10 +44622,9 @@ var Board = function (_Component) {
                     { className: 'fab' },
                     _react2.default.createElement(_addItem2.default, {
                         context: this.state.context,
-                        updateState: function updateState(evt) {
-                            return _this3.addNewList(evt);
-                        },
-                        parentId: this.props.match.params.boardId
+                        parentId: this.props.match.params.boardId,
+
+                        onAddList: this.props.onAddList
                     })
                 )
             );
@@ -44709,15 +44679,7 @@ var _FlatButton = __webpack_require__(143);
 
 var _FlatButton2 = _interopRequireDefault(_FlatButton);
 
-__webpack_require__(35);
-
-var _graphqlCall = __webpack_require__(36);
-
-var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -44729,15 +44691,12 @@ var ListCard = function (_Component) {
     _inherits(ListCard, _Component);
 
     function ListCard(props) {
-        var _this$styles;
-
         _classCallCheck(this, ListCard);
 
         var _this = _possibleConstructorReturn(this, (ListCard.__proto__ || Object.getPrototypeOf(ListCard)).call(this, props));
 
         _this.state = {
             context: 'card',
-            cards: _this.props.listDetails.cards,
             dialogOpen: false,
             dialogValue: _this.props.listDetails._id,
             movingCardId: ''
@@ -44751,10 +44710,7 @@ var ListCard = function (_Component) {
             });
         };
 
-        _this.styles = (_this$styles = {
-            listContainer: {},
-            cardTitle: {},
-            cardContainer: {},
+        _this.styles = {
             cardItem: {
                 listStyleType: 'none',
                 margin: '7px 0',
@@ -44768,29 +44724,18 @@ var ListCard = function (_Component) {
                 position: 'absolute',
                 right: '8px',
                 bottom: '8px'
+            },
+            cardTitle: {
+                verticalAlign: '-webkit-baseline-middle'
+            },
+            moveButton: {
+                float: 'right'
             }
-        }, _defineProperty(_this$styles, 'cardTitle', {
-            verticalAlign: '-webkit-baseline-middle'
-        }), _defineProperty(_this$styles, 'moveButton', {
-            float: 'right'
-        }), _this$styles);
+        };
 
         _this.moveCardtoNewList = function (oldList, newList) {
             if (oldList !== newList) {
-                var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
-
-                client.mutation({
-                    moveCard: {
-                        variables: {
-                            prevListId: oldList,
-                            newListId: newList,
-                            cardId: _this.state.movingCardId
-                        },
-                        result: '\n                            _id\n                        '
-                    }
-                }).then(function (result) {
-                    _this.props.reloadLists();
-                });
+                _this.props.onMoveCard(oldList, newList, _this.state.movingCardId);
             }
         };
 
@@ -44838,13 +44783,13 @@ var ListCard = function (_Component) {
         value: function render() {
             var _this2 = this;
 
-            var cardMap = this.state.cards.map(function (card, idx) {
+            var cardMap = this.props.listDetails.cards.map(function (card, idx) {
                 return _react2.default.createElement(
                     'li',
                     { style: _this2.styles.cardItem, key: idx },
                     _react2.default.createElement(
                         'span',
-                        { style: _this2.styles.cardTitle },
+                        null,
                         card.title
                     ),
                     _react2.default.createElement(
@@ -44876,10 +44821,10 @@ var ListCard = function (_Component) {
                 null,
                 _react2.default.createElement(
                     'div',
-                    { style: this.styles.listContainer },
+                    null,
                     _react2.default.createElement(
                         'div',
-                        { style: this.styles.cardTitle },
+                        null,
                         _react2.default.createElement(
                             'h3',
                             null,
@@ -44888,7 +44833,7 @@ var ListCard = function (_Component) {
                     ),
                     _react2.default.createElement(
                         'ul',
-                        { style: this.styles.cardContainer },
+                        null,
                         cardMap
                     )
                 ),
@@ -44900,10 +44845,8 @@ var ListCard = function (_Component) {
                         { style: this.styles.fabSmall },
                         _react2.default.createElement(_addItem2.default, {
                             label: 'Add Card',
-                            updateState: function updateState(evt) {
-                                return _this2.updateOnAdd(evt);
-                            },
                             context: this.state.context,
+                            onAddCard: this.props.onAddCard,
                             parentId: this.props.listDetails._id
                         })
                     ),
@@ -48802,6 +48745,8 @@ function onAddBoard(newBoardTitle) {
                 };
                 dispatch(action);
             }
+        }).catch(function (err) {
+            console.error('error:: ', err);
         });
     };
 }
@@ -48875,14 +48820,14 @@ function getLists(boardId) {
     };
 }
 
-function onAddList(newList, boardId) {
+function onAddList(newListTitle, boardId) {
     var action = {};
 
     return function (dispatch) {
         return client.mutation({
             addList: {
                 variables: {
-                    title: title,
+                    title: newListTitle,
                     parentId: boardId
                 },
                 result: '\n                _id\n                title\n                parentId\n                cards {\n                    _id\n                    title\n                }\n            '
@@ -48890,11 +48835,15 @@ function onAddList(newList, boardId) {
         }).then(function (result) {
             action = {
                 type: _actionTypes.ADD_LIST,
-                payload: { result: result },
+                payload: {
+                    result: result
+                },
                 error: false
             };
 
             dispatch(action);
+        }).catch(function (err) {
+            console.error('error:: ', err);
         });
     };
 }
@@ -48914,7 +48863,10 @@ function onAddCard(cardTitle, listId) {
         }).then(function (result) {
             action = {
                 type: _actionTypes.ADD_CARD,
-                payload: { result: result },
+                payload: {
+                    result: result,
+                    listId: listId
+                },
                 error: false
             };
             dispatch(action);
@@ -48935,14 +48887,21 @@ function onMoveCard(prevListId, newListId, cardId) {
                     newListId: newListId,
                     cardId: cardId
                 },
-                result: '\n                _id\n            '
+                result: '\n                _id\n                title\n                parentId\n                cards {\n                    title\n                    _id\n                }\n            '
             }
         }).then(function (result) {
             action = {
                 type: _actionTypes.MOVE_CARD,
-                payload: { result: result },
+                payload: {
+                    result: result,
+                    prevListId: prevListId,
+                    newListId: newListId
+                },
                 error: false
             };
+            dispatch(action);
+        }).catch(function (err) {
+            console.error('error:: ', err);
         });
     };
 }

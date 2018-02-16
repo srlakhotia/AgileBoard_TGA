@@ -30,6 +30,8 @@ function onAddBoard(newBoardTitle) {
             };
             dispatch(action);
         }
+    }).catch(err => {
+        console.error('error:: ', err)
     });
 }
 

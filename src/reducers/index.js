@@ -12,7 +12,7 @@ export default (prevState, action) => {
     switch (action.type) {
         case ADD_BOARD: {
             prevState.boardCollection.push(action.payload.result.data.addBoard);
-            let newCollection = prevState.boardCollection;
+            let newCollection = prevState;
             
             return Object.assign({}, prevState, {
                 boardCollection: newCollection

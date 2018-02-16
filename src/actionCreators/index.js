@@ -14,7 +14,6 @@ export {
     getLists,
     onAddCard,
     onMoveCard,
-
     getAllBoards,
     onAddBoard
 }

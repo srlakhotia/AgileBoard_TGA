@@ -95,6 +95,7 @@ export default class AddItem extends Component {
                     fullWidth={true}
                     id="new_title"
                     errorText={this.state.requiredError}
+                    autoFocus={true}
                 />
                 </Dialog>
             </React.Fragment>
