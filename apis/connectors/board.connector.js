@@ -24,6 +24,16 @@ class Board {
 
             return newBoard;
         }
+
+        this.removeBoard = (input) => {
+            const boardColln = BoardModel
+                                .remove({_id: input.boardId})
+                                .then(data => {
+                                    return BoardModel.find();
+                                });
+
+            return boardColln
+        }
     }
 }
 
