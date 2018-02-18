@@ -61,7 +61,26 @@ class List {
                                     return ListModel.find();
                                 });
             return listColln;
-        }
+        };
+
+        this.removeCard = (input) => {
+            const listId = mongoose.Types.ObjectId(input.listId);
+            const cardId = mongoose.Types.ObjectId(input.cardId);
+
+            const listColln = ListModel.findByIdAndUpdate(
+                                listId, {
+                                    $pull: {
+                                        cards: {
+                                            "_id": cardId
+                                        }
+                                    }
+                                }, {new: true})
+                            .then(data => {
+                                return ListModel.find();
+                            });
+
+            return listColln;
+        };
 
         this.findListById = (listId) => {
             const id = mongoose.Types.ObjectId(listId);

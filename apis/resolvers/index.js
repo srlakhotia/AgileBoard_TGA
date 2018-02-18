@@ -44,6 +44,11 @@ const resolveFunctions = {
             return list.removeList(input);
         },
 
+        removeCard(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.removeCard(input);
+        }
+
     }
 };
 

@@ -49,6 +49,11 @@ const typeDefs = `
         listId: ID!
     }
 
+    input RemoveCardInput {
+        listId: ID!
+        cardId: ID!
+    }
+
     type Mutation {
         addBoard(input: BoardInput): Board
         addList(input: ListInput): Lists
@@ -56,6 +61,7 @@ const typeDefs = `
         moveCard(input: MoveCardInput): [Lists]
         removeBoard(input: RemoveBoardInput): [Board]
         removeList(input: RemoveListInput): [Lists]
+        removeCard(input: RemoveCardInput): [Lists]
     }
     
     schema {
