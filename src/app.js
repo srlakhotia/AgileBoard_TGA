@@ -38,6 +38,7 @@ class App extends Component {
                                     onAddCard={this.props.onAddCard}
                                     onMoveCard={this.props.onMoveCard}
                                     onRemoveList={this.props.onRemoveList}
+                                    onRemoveCard={this.props.onRemoveCard}
 
                                     lists={this.props.listCollection}
                                 />} >
@@ -81,6 +82,9 @@ const mapDispachToProps = (dispatch, ownProps) => {
         },
         onRemoveList: (listId, parentId) => {
             dispatch(Actions.onRemoveList(listId, parentId));
+        },
+        onRemoveCard: (cardId, listId, parentId) => {
+            dispatch(Actions.onRemoveCard(cardId, listId, parentId));
         }
     }
 };

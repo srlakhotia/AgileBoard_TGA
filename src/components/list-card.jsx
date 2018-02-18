@@ -98,6 +98,7 @@ export default class ListCard extends Component {
                 <span>{card.title}</span>
                 <span style={this.styles.moveButton}>
                     <RaisedButton secondary={true} label="Move" onClick={(ev) => this.openDialog(card)} />
+                    <RaisedButton default={true} label="Delete" onClick={(ev) => this.props.onRemoveCard(card._id, this.props.listDetails._id, this.props.listDetails.parentId)} />
                 </span>
                 <div className="clearfix"></div>
             </li>);

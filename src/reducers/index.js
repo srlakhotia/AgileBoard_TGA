@@ -3,7 +3,7 @@ import {
     GET_LISTS,
     ADD_CARD,
     MOVE_CARD,
-
+    REMOVE_CARD,
     ADD_BOARD,
     GET_ALL_BOARD,
     REMOVE_BOARD,
@@ -68,6 +68,12 @@ export default (prevState, action) => {
         case MOVE_CARD: {
             return Object.assign({}, prevState, {
                 listCollection: action.payload.result.data.moveCard
+            });
+        }
+
+        case REMOVE_CARD: {
+            return Object.assign({}, prevState, {
+                listCollection: action.payload.result.data.removeCard
             });
         }
 

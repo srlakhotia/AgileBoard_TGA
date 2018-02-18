@@ -67,6 +67,7 @@ class List {
         this.removeCard = (input) => {
             const listId = mongoose.Types.ObjectId(input.listId);
             const cardId = mongoose.Types.ObjectId(input.cardId);
+            const parentId = mongoose.Types.ObjectId(input.parentId);
 
             const listColln = ListModel.findByIdAndUpdate(
                                 listId, {
@@ -77,7 +78,7 @@ class List {
                                     }
                                 }, {new: true})
                             .then(data => {
-                                return ListModel.find();
+                                return ListModel.find({parentId: parentId});
                             });
 
             return listColln;

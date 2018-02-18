@@ -49,7 +49,7 @@ npm run webpack
 - Remove List from Board
 - Add Card to List
 - Move Card between Lists   
-
+- Remove Card from List
 
 ## Authors
 

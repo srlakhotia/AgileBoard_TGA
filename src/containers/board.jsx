@@ -39,6 +39,7 @@ export default class Board extends Component {
                         onAddCard={this.props.onAddCard}
                         onMoveCard={this.props.onMoveCard}
                         onRemoveList={this.props.onRemoveList}
+                        onRemoveCard={this.props.onRemoveCard}
                     ></ListCard>
                 </li>);
         });

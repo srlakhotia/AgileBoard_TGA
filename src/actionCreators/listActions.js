@@ -5,7 +5,8 @@ import {
     GET_LISTS,
     ADD_CARD,
     MOVE_CARD,
-    REMOVE_LIST
+    REMOVE_LIST,
+    REMOVE_CARD
 } from '../actionTypes';
 
 const client = api({url: 'http://localhost:3000/graphql'});
@@ -103,6 +104,40 @@ function onAddCard(cardTitle, listId) {
         });
 }
 
+function onRemoveCard(cardId, listId, parentId) {
+    let action = {};
+
+    return dispatch => client.mutation({
+        removeCard: {
+            variables: {
+                cardId: cardId,
+                listId: listId,
+                parentId: parentId
+            },
+            result: `
+                _id
+                title
+                parentId
+                cards {
+                    title
+                    _id
+                }
+            `
+        }
+    }).then(result => {
+        action = {
+            type: REMOVE_CARD,
+            payload: {
+                result: result
+            },
+            error: false
+        }
+        dispatch(action);
+    }).catch(err => {
+        console.error('error:: ', err)
+    });
+}
+
 function onRemoveList(listId, parentId) {
     let action = {};
 
@@ -177,5 +212,6 @@ export {
     getLists,
     onAddCard,
     onMoveCard,
+    onRemoveCard,
     onRemoveList
 }

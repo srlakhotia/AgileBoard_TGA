@@ -2636,6 +2636,7 @@ var GET_LISTS = "GET_LISTS";
 var ADD_CARD = "ADD_CARD";
 var MOVE_CARD = "MOVE_CARD";
 var REMOVE_LIST = "REMOVE_LIST";
+var REMOVE_CARD = "REMOVE_CARD";
 
 var ADD_BOARD = "ADD_BOARD";
 var GET_ALL_BOARD = "GET_ALL_BOARD";
@@ -2646,6 +2647,7 @@ exports.GET_LISTS = GET_LISTS;
 exports.ADD_CARD = ADD_CARD;
 exports.MOVE_CARD = MOVE_CARD;
 exports.REMOVE_LIST = REMOVE_LIST;
+exports.REMOVE_CARD = REMOVE_CARD;
 exports.ADD_BOARD = ADD_BOARD;
 exports.GET_ALL_BOARD = GET_ALL_BOARD;
 exports.REMOVE_BOARD = REMOVE_BOARD;
@@ -26879,6 +26881,13 @@ exports.default = function (prevState, action) {
                 });
             }
 
+        case _actionTypes.REMOVE_CARD:
+            {
+                return Object.assign({}, prevState, {
+                    listCollection: action.payload.result.data.removeCard
+                });
+            }
+
         default:
             {
                 return prevState;
@@ -28767,6 +28776,7 @@ var App = function (_Component) {
                                     onAddCard: _this2.props.onAddCard,
                                     onMoveCard: _this2.props.onMoveCard,
                                     onRemoveList: _this2.props.onRemoveList,
+                                    onRemoveCard: _this2.props.onRemoveCard,
 
                                     lists: _this2.props.listCollection
                                 }));
@@ -28812,6 +28822,9 @@ var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
         },
         onRemoveList: function onRemoveList(listId, parentId) {
             dispatch(Actions.onRemoveList(listId, parentId));
+        },
+        onRemoveCard: function onRemoveCard(cardId, listId, parentId) {
+            dispatch(Actions.onRemoveCard(cardId, listId, parentId));
         }
     };
 };
@@ -44638,7 +44651,8 @@ var Board = function (_Component) {
 
                         onAddCard: _this2.props.onAddCard,
                         onMoveCard: _this2.props.onMoveCard,
-                        onRemoveList: _this2.props.onRemoveList
+                        onRemoveList: _this2.props.onRemoveList,
+                        onRemoveCard: _this2.props.onRemoveCard
                     })
                 );
             });
@@ -44830,6 +44844,9 @@ var ListCard = function (_Component) {
                         { style: _this2.styles.moveButton },
                         _react2.default.createElement(_RaisedButton2.default, { secondary: true, label: 'Move', onClick: function onClick(ev) {
                                 return _this2.openDialog(card);
+                            } }),
+                        _react2.default.createElement(_RaisedButton2.default, { 'default': true, label: 'Delete', onClick: function onClick(ev) {
+                                return _this2.props.onRemoveCard(card._id, _this2.props.listDetails._id, _this2.props.listDetails.parentId);
                             } })
                     ),
                     _react2.default.createElement('div', { className: 'clearfix' })
@@ -48722,7 +48739,7 @@ exports.default = function (obj, key, value) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.onRemoveList = exports.onRemoveBoard = exports.onAddBoard = exports.getAllBoards = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
+exports.onRemoveCard = exports.onRemoveList = exports.onRemoveBoard = exports.onAddBoard = exports.getAllBoards = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
 
 var _boardActions = __webpack_require__(365);
 
@@ -48736,6 +48753,7 @@ exports.getAllBoards = _boardActions.getAllBoards;
 exports.onAddBoard = _boardActions.onAddBoard;
 exports.onRemoveBoard = _boardActions.onRemoveBoard;
 exports.onRemoveList = _listActions.onRemoveList;
+exports.onRemoveCard = _listActions.onRemoveCard;
 
 /***/ }),
 /* 365 */
@@ -48848,7 +48866,7 @@ exports.onRemoveBoard = onRemoveBoard;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.onRemoveList = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
+exports.onRemoveList = exports.onRemoveCard = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
 
 __webpack_require__(91);
 
@@ -48939,6 +48957,34 @@ function onAddCard(cardTitle, listId) {
     };
 }
 
+function onRemoveCard(cardId, listId, parentId) {
+    var action = {};
+
+    return function (dispatch) {
+        return client.mutation({
+            removeCard: {
+                variables: {
+                    cardId: cardId,
+                    listId: listId,
+                    parentId: parentId
+                },
+                result: '\n                _id\n                title\n                parentId\n                cards {\n                    title\n                    _id\n                }\n            '
+            }
+        }).then(function (result) {
+            action = {
+                type: _actionTypes.REMOVE_CARD,
+                payload: {
+                    result: result
+                },
+                error: false
+            };
+            dispatch(action);
+        }).catch(function (err) {
+            console.error('error:: ', err);
+        });
+    };
+}
+
 function onRemoveList(listId, parentId) {
     var action = {};
 
@@ -49000,6 +49046,7 @@ exports.onAddList = onAddList;
 exports.getLists = getLists;
 exports.onAddCard = onAddCard;
 exports.onMoveCard = onMoveCard;
+exports.onRemoveCard = onRemoveCard;
 exports.onRemoveList = onRemoveList;
 
 /***/ })

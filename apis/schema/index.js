@@ -53,6 +53,7 @@ const typeDefs = `
     input RemoveCardInput {
         listId: ID!
         cardId: ID!
+        parentId: ID!
     }
 
     type Mutation {
