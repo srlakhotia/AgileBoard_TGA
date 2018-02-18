@@ -2635,6 +2635,7 @@ var ADD_LIST = "ADD_LIST";
 var GET_LISTS = "GET_LISTS";
 var ADD_CARD = "ADD_CARD";
 var MOVE_CARD = "MOVE_CARD";
+var REMOVE_LIST = "REMOVE_LIST";
 
 var ADD_BOARD = "ADD_BOARD";
 var GET_ALL_BOARD = "GET_ALL_BOARD";
@@ -2644,6 +2645,7 @@ exports.ADD_LIST = ADD_LIST;
 exports.GET_LISTS = GET_LISTS;
 exports.ADD_CARD = ADD_CARD;
 exports.MOVE_CARD = MOVE_CARD;
+exports.REMOVE_LIST = REMOVE_LIST;
 exports.ADD_BOARD = ADD_BOARD;
 exports.GET_ALL_BOARD = GET_ALL_BOARD;
 exports.REMOVE_BOARD = REMOVE_BOARD;
@@ -26840,6 +26842,13 @@ exports.default = function (prevState, action) {
                 });
             }
 
+        case _actionTypes.REMOVE_LIST:
+            {
+                return Object.assign({}, prevState, {
+                    listCollection: action.payload.result.data.removeList
+                });
+            }
+
         case _actionTypes.ADD_LIST:
             {
                 var _newCollection = [].concat(_toConsumableArray(prevState.listCollection), [action.payload.result.data.addList]);
@@ -26865,7 +26874,6 @@ exports.default = function (prevState, action) {
 
         case _actionTypes.MOVE_CARD:
             {
-                console.log('action.payload.result.data.moveCard:: ', action.payload.result.data.moveCard);
                 return Object.assign({}, prevState, {
                     listCollection: action.payload.result.data.moveCard
                 });
@@ -28758,6 +28766,7 @@ var App = function (_Component) {
                                     onAddList: _this2.props.onAddList,
                                     onAddCard: _this2.props.onAddCard,
                                     onMoveCard: _this2.props.onMoveCard,
+                                    onRemoveList: _this2.props.onRemoveList,
 
                                     lists: _this2.props.listCollection
                                 }));
@@ -28800,6 +28809,9 @@ var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
         },
         onRemoveBoard: function onRemoveBoard(boardId) {
             dispatch(Actions.onRemoveBoard(boardId));
+        },
+        onRemoveList: function onRemoveList(listId, parentId) {
+            dispatch(Actions.onRemoveList(listId, parentId));
         }
     };
 };
@@ -44625,7 +44637,8 @@ var Board = function (_Component) {
                         allLists: _this2.props.lists,
 
                         onAddCard: _this2.props.onAddCard,
-                        onMoveCard: _this2.props.onMoveCard
+                        onMoveCard: _this2.props.onMoveCard,
+                        onRemoveList: _this2.props.onRemoveList
                     })
                 );
             });
@@ -44870,7 +44883,9 @@ var ListCard = function (_Component) {
                             parentId: this.props.listDetails._id
                         })
                     ),
-                    _react2.default.createElement(_RaisedButton2.default, { label: 'Delete List' })
+                    _react2.default.createElement(_RaisedButton2.default, { label: 'Delete List', onClick: function onClick(ev) {
+                            return _this2.props.onRemoveList(_this2.props.listDetails._id, _this2.props.listDetails.parentId);
+                        } })
                 ),
                 _react2.default.createElement(
                     _Dialog2.default,
@@ -48707,7 +48722,7 @@ exports.default = function (obj, key, value) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.onRemoveBoard = exports.onAddBoard = exports.getAllBoards = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
+exports.onRemoveList = exports.onRemoveBoard = exports.onAddBoard = exports.getAllBoards = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
 
 var _boardActions = __webpack_require__(365);
 
@@ -48720,6 +48735,7 @@ exports.onMoveCard = _listActions.onMoveCard;
 exports.getAllBoards = _boardActions.getAllBoards;
 exports.onAddBoard = _boardActions.onAddBoard;
 exports.onRemoveBoard = _boardActions.onRemoveBoard;
+exports.onRemoveList = _listActions.onRemoveList;
 
 /***/ }),
 /* 365 */
@@ -48832,7 +48848,7 @@ exports.onRemoveBoard = onRemoveBoard;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
+exports.onRemoveList = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
 
 __webpack_require__(91);
 
@@ -48923,6 +48939,33 @@ function onAddCard(cardTitle, listId) {
     };
 }
 
+function onRemoveList(listId, parentId) {
+    var action = {};
+
+    return function (dispatch) {
+        return client.mutation({
+            removeList: {
+                variables: {
+                    listId: listId,
+                    parentId: parentId
+                },
+                result: '\n                _id\n                title\n                parentId\n                cards {\n                    title\n                    _id\n                }\n            '
+            }
+        }).then(function (result) {
+            action = {
+                type: _actionTypes.REMOVE_LIST,
+                payload: {
+                    result: result
+                },
+                error: false
+            };
+            dispatch(action);
+        }).catch(function (err) {
+            console.error('error:: ', err);
+        });
+    };
+}
+
 function onMoveCard(prevListId, newListId, cardId) {
     var action = {};
 
@@ -48957,6 +49000,7 @@ exports.onAddList = onAddList;
 exports.getLists = getLists;
 exports.onAddCard = onAddCard;
 exports.onMoveCard = onMoveCard;
+exports.onRemoveList = onRemoveList;
 
 /***/ })
 /******/ ]);

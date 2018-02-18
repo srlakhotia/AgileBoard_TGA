@@ -6,7 +6,8 @@ import {
 
     ADD_BOARD,
     GET_ALL_BOARD,
-    REMOVE_BOARD
+    REMOVE_BOARD,
+    REMOVE_LIST
 } from '../actionTypes';
 
 export default (prevState, action) => {
@@ -37,6 +38,12 @@ export default (prevState, action) => {
             });
         }
 
+        case REMOVE_LIST: {
+            return Object.assign({}, prevState, {
+                listCollection: action.payload.result.data.removeList
+            });
+        }
+
         case ADD_LIST: {
             let newCollection = [...prevState.listCollection, action.payload.result.data.addList];
             
@@ -59,7 +66,6 @@ export default (prevState, action) => {
         }
 
         case MOVE_CARD: {
-            console.log('action.payload.result.data.moveCard:: ', action.payload.result.data.moveCard)
             return Object.assign({}, prevState, {
                 listCollection: action.payload.result.data.moveCard
             });

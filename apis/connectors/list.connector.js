@@ -55,10 +55,11 @@ class List {
 
         this.removeList = (input) => {
             const id = mongoose.Types.ObjectId(input.listId);
+            const parentId = mongoose.Types.ObjectId(input.parentId);
             const listColln = ListModel
                                 .remove({_id: id})
                                 .then(data => {
-                                    return ListModel.find();
+                                    return ListModel.find({parentId: parentId});
                                 });
             return listColln;
         };

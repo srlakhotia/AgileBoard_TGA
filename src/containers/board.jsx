@@ -27,7 +27,6 @@ export default class Board extends Component {
 
     componentDidMount() {
         this.props.getAllLists(this.props.match.params.boardId);
-
     }
 
     render() {
@@ -39,6 +38,7 @@ export default class Board extends Component {
 
                         onAddCard={this.props.onAddCard}
                         onMoveCard={this.props.onMoveCard}
+                        onRemoveList={this.props.onRemoveList}
                     ></ListCard>
                 </li>);
         });

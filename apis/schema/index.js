@@ -47,6 +47,7 @@ const typeDefs = `
 
     input RemoveListInput {
         listId: ID!
+        parentId: ID!
     }
 
     input RemoveCardInput {

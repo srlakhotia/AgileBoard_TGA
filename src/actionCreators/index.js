@@ -7,7 +7,8 @@ import {
     onAddList,
     getLists,
     onAddCard,
-    onMoveCard
+    onMoveCard,
+    onRemoveList
 } from './listActions';
 
 export {
@@ -17,5 +18,6 @@ export {
     onMoveCard,
     getAllBoards,
     onAddBoard,
-    onRemoveBoard
+    onRemoveBoard,
+    onRemoveList
 }

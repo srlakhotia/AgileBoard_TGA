@@ -132,7 +132,7 @@ export default class ListCard extends Component {
                         parentId={this.props.listDetails._id}
                     ></AddItem>
                 </div>
-                <RaisedButton label="Delete List" />
+                <RaisedButton label="Delete List"  onClick={(ev) => this.props.onRemoveList(this.props.listDetails._id, this.props.listDetails.parentId)}/>
             </div>
             <Dialog
                     title={this.moveCardDialogLabel}
