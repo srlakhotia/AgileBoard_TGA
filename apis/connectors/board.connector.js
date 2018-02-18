@@ -1,4 +1,5 @@
 const BoardModel = require('../models/board.model');
+const ListModel = require('../models/list.model');
 
 class Board {
     constructor() {
@@ -29,6 +30,7 @@ class Board {
             const boardColln = BoardModel
                                 .remove({_id: input.boardId})
                                 .then(data => {
+                                    ListModel.remove({parentId: input.boardId}).exec();
                                     return BoardModel.find();
                                 });
 
