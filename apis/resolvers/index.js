@@ -37,7 +37,13 @@ const resolveFunctions = {
         removeBoard(_, {input}, ctx) {
             const board = new BoardConnector.Board();
             return board.removeBoard(input);
-        }
+        },
+
+        removeList(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.removeList(input);
+        },
+
     }
 };
 

@@ -45,12 +45,17 @@ const typeDefs = `
         boardId: ID!
     }
 
+    input RemoveListInput {
+        listId: ID!
+    }
+
     type Mutation {
         addBoard(input: BoardInput): Board
         addList(input: ListInput): Lists
         addCard(input: CardInput): Lists
         moveCard(input: MoveCardInput): [Lists]
         removeBoard(input: RemoveBoardInput): [Board]
+        removeList(input: RemoveListInput): [Lists]
     }
     
     schema {
