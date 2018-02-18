@@ -2638,6 +2638,7 @@ var MOVE_CARD = "MOVE_CARD";
 
 var ADD_BOARD = "ADD_BOARD";
 var GET_ALL_BOARD = "GET_ALL_BOARD";
+var REMOVE_BOARD = "REMOVE_BOARD";
 
 exports.ADD_LIST = ADD_LIST;
 exports.GET_LISTS = GET_LISTS;
@@ -2645,6 +2646,7 @@ exports.ADD_CARD = ADD_CARD;
 exports.MOVE_CARD = MOVE_CARD;
 exports.ADD_BOARD = ADD_BOARD;
 exports.GET_ALL_BOARD = GET_ALL_BOARD;
+exports.REMOVE_BOARD = REMOVE_BOARD;
 
 /***/ }),
 /* 55 */
@@ -26824,6 +26826,13 @@ exports.default = function (prevState, action) {
                 });
             }
 
+        case _actionTypes.REMOVE_BOARD:
+            {
+                return Object.assign({}, prevState, {
+                    boardCollection: action.payload.result.data.removeBoard
+                });
+            }
+
         case _actionTypes.GET_LISTS:
             {
                 return Object.assign({}, prevState, {
@@ -28737,6 +28746,7 @@ var App = function (_Component) {
                                 return _react2.default.createElement(_boardContainer2.default, _extends({}, props, {
                                     getAllBoards: _this2.props.getAllBoards,
                                     onAddBoard: _this2.props.onAddBoard,
+                                    onRemoveBoard: _this2.props.onRemoveBoard,
 
                                     boardList: _this2.props.boardCollection
                                 }));
@@ -28787,6 +28797,9 @@ var mapDispachToProps = function mapDispachToProps(dispatch, ownProps) {
         },
         onMoveCard: function onMoveCard(prevListId, newListId, cardId) {
             dispatch(Actions.onMoveCard(prevListId, newListId, cardId));
+        },
+        onRemoveBoard: function onRemoveBoard(boardId) {
+            dispatch(Actions.onRemoveBoard(boardId));
         }
     };
 };
@@ -40370,7 +40383,10 @@ var BoardContainer = function (_Component) {
                 return _react2.default.createElement(
                     'li',
                     { key: board._id, style: _this2.styles.boardItem },
-                    _react2.default.createElement(_boardCard2.default, { boardDetails: board })
+                    _react2.default.createElement(_boardCard2.default, {
+                        boardDetails: board,
+                        onRemoveBoard: _this2.props.onRemoveBoard
+                    })
                 );
             });
             return _react2.default.createElement(
@@ -44486,6 +44502,8 @@ var BoardCard = function (_Component) {
     _createClass(BoardCard, [{
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             var boardLink = '/board/' + this.props.boardDetails._id;
             return _react2.default.createElement(
                 _react2.default.Fragment,
@@ -44510,7 +44528,9 @@ var BoardCard = function (_Component) {
                             { to: boardLink },
                             _react2.default.createElement(_RaisedButton2.default, { label: 'View', primary: true, style: this.styles.firstButton })
                         ),
-                        _react2.default.createElement(_RaisedButton2.default, { label: 'Delete' })
+                        _react2.default.createElement(_RaisedButton2.default, { label: 'Delete', onClick: function onClick(evt) {
+                                return _this2.props.onRemoveBoard(_this2.props.boardDetails._id);
+                            } })
                     )
                 )
             );
@@ -48687,7 +48707,7 @@ exports.default = function (obj, key, value) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.onAddBoard = exports.getAllBoards = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
+exports.onRemoveBoard = exports.onAddBoard = exports.getAllBoards = exports.onMoveCard = exports.onAddCard = exports.getLists = exports.onAddList = undefined;
 
 var _boardActions = __webpack_require__(365);
 
@@ -48699,6 +48719,7 @@ exports.onAddCard = _listActions.onAddCard;
 exports.onMoveCard = _listActions.onMoveCard;
 exports.getAllBoards = _boardActions.getAllBoards;
 exports.onAddBoard = _boardActions.onAddBoard;
+exports.onRemoveBoard = _boardActions.onRemoveBoard;
 
 /***/ }),
 /* 365 */
@@ -48710,7 +48731,7 @@ exports.onAddBoard = _boardActions.onAddBoard;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getAllBoards = exports.onAddBoard = undefined;
+exports.onRemoveBoard = exports.getAllBoards = exports.onAddBoard = undefined;
 
 var _actionTypes = __webpack_require__(54);
 
@@ -48734,7 +48755,6 @@ function onAddBoard(newBoardTitle) {
                 result: '\n                _id\n                title\n            '
             }
         }).then(function (result) {
-            var newData = void 0;
             if (!result.error) {
                 action = {
                     type: _actionTypes.ADD_BOARD,
@@ -48772,8 +48792,35 @@ function getAllBoards() {
     };
 }
 
+function onRemoveBoard(boardId) {
+    var action = {};
+
+    return function (dispatch) {
+        return client.mutation({
+            removeBoard: {
+                variables: { boardId: boardId },
+                result: '\n                _id\n                title\n            '
+            }
+        }).then(function (result) {
+            if (!result.error) {
+                action = {
+                    type: _actionTypes.REMOVE_BOARD,
+                    payload: {
+                        result: result
+                    },
+                    error: false
+                };
+                dispatch(action);
+            }
+        }).catch(function (err) {
+            return console.error('error: ', err);
+        });
+    };
+}
+
 exports.onAddBoard = onAddBoard;
 exports.getAllBoards = getAllBoards;
+exports.onRemoveBoard = onRemoveBoard;
 
 /***/ }),
 /* 366 */

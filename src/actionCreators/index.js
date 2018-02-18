@@ -1,6 +1,7 @@
 import {
     getAllBoards,
-    onAddBoard
+    onAddBoard,
+    onRemoveBoard
 } from './boardActions';
 import {
     onAddList,
@@ -15,5 +16,6 @@ export {
     onAddCard,
     onMoveCard,
     getAllBoards,
-    onAddBoard
+    onAddBoard,
+    onRemoveBoard
 }

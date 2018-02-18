@@ -25,6 +25,7 @@ class App extends Component {
                             <BoardContainer {...props}
                                 getAllBoards={this.props.getAllBoards}
                                 onAddBoard={this.props.onAddBoard}
+                                onRemoveBoard={this.props.onRemoveBoard}
 
                                 boardList={this.props.boardCollection} 
                             />} >
@@ -73,6 +74,9 @@ const mapDispachToProps = (dispatch, ownProps) => {
         },
         onMoveCard: (prevListId, newListId, cardId) => {
             dispatch(Actions.onMoveCard(prevListId, newListId, cardId));
+        },
+        onRemoveBoard: (boardId) => {
+            dispatch(Actions.onRemoveBoard(boardId));
         }
     }
 };

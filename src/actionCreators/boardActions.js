@@ -1,6 +1,7 @@
 import {
     ADD_BOARD,
-    GET_ALL_BOARD
+    GET_ALL_BOARD,
+    REMOVE_BOARD
 } from '../actionTypes';
 import 'isomorphic-fetch';
 import api, {GraphQLCall} from 'graphql-call';
@@ -19,7 +20,6 @@ function onAddBoard(newBoardTitle) {
             `
         }
     }).then(result => {
-        let newData;
         if(!result.error) {
             action = {
                 type: ADD_BOARD,
@@ -60,7 +60,33 @@ function getAllBoards() {
     }
 }
 
+function onRemoveBoard(boardId) {
+    let action = {};
+
+    return dispatch => client.mutation({
+        removeBoard: {
+            variables: {boardId: boardId},
+            result: `
+                _id
+                title
+            `
+        }
+    }).then(result => {
+        if(!result.error) {
+            action = {
+                type: REMOVE_BOARD,
+                payload: {
+                    result
+                },
+                error: false
+            }
+            dispatch(action);
+        }
+    }).catch(err => console.error('error: ', err));
+}
+
 export {
     onAddBoard,
-    getAllBoards
+    getAllBoards,
+    onRemoveBoard
 }

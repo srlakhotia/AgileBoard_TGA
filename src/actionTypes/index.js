@@ -5,6 +5,7 @@ let MOVE_CARD = "MOVE_CARD";
 
 let ADD_BOARD = "ADD_BOARD";
 let GET_ALL_BOARD = "GET_ALL_BOARD";
+let REMOVE_BOARD = "REMOVE_BOARD";
 
 export {
   //Lists
@@ -15,5 +16,6 @@ export {
 
   //Boards
   ADD_BOARD,
-  GET_ALL_BOARD
+  GET_ALL_BOARD,
+  REMOVE_BOARD
 }

@@ -5,7 +5,8 @@ import {
     MOVE_CARD,
 
     ADD_BOARD,
-    GET_ALL_BOARD
+    GET_ALL_BOARD,
+    REMOVE_BOARD
 } from '../actionTypes';
 
 export default (prevState, action) => {
@@ -21,6 +22,12 @@ export default (prevState, action) => {
         case GET_ALL_BOARD: {
             return Object.assign({}, prevState, {
                 boardCollection: action.payload.result.data.boards
+            });
+        }
+
+        case REMOVE_BOARD: {
+            return Object.assign({}, prevState, {
+                boardCollection: action.payload.result.data.removeBoard
             });
         }
 

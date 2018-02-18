@@ -31,7 +31,10 @@ export default class BoardContainer extends Component {
     render() {
         let boardMap = this.props.boardList.map((board) => {
             return (<li key={board._id} style={this.styles.boardItem}>
-                <BoardCard boardDetails={board}></BoardCard>
+                <BoardCard
+                    boardDetails={board}
+                    onRemoveBoard={this.props.onRemoveBoard}
+                ></BoardCard>
             </li>);
         });
         return (
