@@ -8,36 +8,38 @@ class List {
             const newListId = mongoose.Types.ObjectId(input.newListId);
             const cardId = mongoose.Types.ObjectId(input.cardId);
 
-            let query, cardObj;
-            const listItem = ListModel.findById(prevListId, (err, data) => {
-                cardObj = data.cards.filter((card) => {
-                    return card._id.toString() == cardId.toString();
-                })[0];
+            let query, cardObj, parentId;
 
-                query = ListModel.findByIdAndUpdate(
-                            prevListId, {
-                                $pull: {
-                                    cards: {
-                                        "_id": cardId
-                                    }
-                                }
-                            }, {new: true});
-                return query
-                    .exec()
-                    .then(() => {
-                        const addQuery = ListModel.findByIdAndUpdate(
-                            newListId,{
-                                $push: {
-                                cards: cardObj
-                                }
-                            },
-                            {new: true}
-                        );
+            const listItems = ListModel
+                                .findById(prevListId)
+                                .then(data => {
+                                    parentId = data.parentId;
+                                    cardObj = data.cards.filter((card) => {
+                                        return card._id.toString() == cardId.toString();
+                                    })[0];
 
-                        return addQuery.exec();
-                    });
-            });
-            return listItem;
+                                    return ListModel.findByIdAndUpdate(
+                                        prevListId, {
+                                            $pull: {
+                                                cards: {
+                                                    "_id": cardId
+                                                }
+                                            }
+                                        }, {new: true});
+                                })
+                                .then(data => {
+                                    return ListModel.findByIdAndUpdate(
+                                        newListId,{
+                                            $push: {
+                                                cards: cardObj
+                                            }
+                                        },
+                                        {new: true});
+                                })
+                                .then(res=> {
+                                    return ListModel.find();
+                                });
+            return listItems;
         }
 
         this.findLists = (boardId) => {
@@ -48,6 +50,37 @@ class List {
                 }
                 return data;
             });
+            return listColln;
+        };
+
+        this.removeList = (input) => {
+            const id = mongoose.Types.ObjectId(input.listId);
+            const parentId = mongoose.Types.ObjectId(input.parentId);
+            const listColln = ListModel
+                                .remove({_id: id})
+                                .then(data => {
+                                    return ListModel.find({parentId: parentId});
+                                });
+            return listColln;
+        };
+
+        this.removeCard = (input) => {
+            const listId = mongoose.Types.ObjectId(input.listId);
+            const cardId = mongoose.Types.ObjectId(input.cardId);
+            const parentId = mongoose.Types.ObjectId(input.parentId);
+
+            const listColln = ListModel.findByIdAndUpdate(
+                                listId, {
+                                    $pull: {
+                                        cards: {
+                                            "_id": cardId
+                                        }
+                                    }
+                                }, {new: true})
+                            .then(data => {
+                                return ListModel.find({parentId: parentId});
+                            });
+
             return listColln;
         };
 

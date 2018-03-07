@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import 'isomorphic-fetch';
-import api, {GraphQLCall} from 'graphql-call';
 import AddItem from '../components/addItem.jsx';
 import ListCard from '../components/list-card.jsx';
 import {GridList, GridTile} from 'material-ui/GridList';
@@ -9,15 +7,7 @@ export default class Board extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            lists: [],
             context: 'list'
-        }
-
-        this.addNewList = (newList) => {
-            let lists = this.state.lists;
-
-            lists.push(newList);
-            this.setState(lists);
         }
 
         this.styles = {
@@ -36,42 +26,21 @@ export default class Board extends Component {
     }
 
     componentDidMount() {
-        this.getAllLists = () => {
-            const client = api({url: 'http://localhost:3000/graphql'});
-    
-            client.query({
-                lists: {
-                   variables: {boardId: this.props.match.params.boardId},
-                   result: `
-                   _id
-                    title
-                    parentId
-                    cards {
-                        _id
-                        title
-                    }
-                   `
-                }
-            }).then(result => {
-                let lists = []
-                // this.setState({
-                //     lists: lists
-                // });
-                // let lists ;
-                this.setState({
-                    lists: result.data.lists
-                });
-            }).catch(err => {
-                console.error('err:: ', err);
-            });
-        };
-        this.getAllLists();
+        this.props.getAllLists(this.props.match.params.boardId);
     }
 
     render() {
-        let listMap = this.state.lists.map((list, idx) => {
+        let listMap = this.props.lists.map((list, idx) => {
             return (<li style={this.styles.listContainer} key={idx}>
-                    <ListCard listDetails={list} allLists={this.state.lists} reloadLists={this.getAllLists}></ListCard>
+                    <ListCard
+                        listDetails={list}
+                        allLists={this.props.lists}
+
+                        onAddCard={this.props.onAddCard}
+                        onMoveCard={this.props.onMoveCard}
+                        onRemoveList={this.props.onRemoveList}
+                        onRemoveCard={this.props.onRemoveCard}
+                    ></ListCard>
                 </li>);
         });
         return (
@@ -80,7 +49,12 @@ export default class Board extends Component {
                     {listMap}
                 </ul>
                 <div className="fab">
-                    <AddItem context={this.state.context} updateState={(evt) => this.addNewList(evt)} parentId={this.props.match.params.boardId}></AddItem>
+                    <AddItem
+                        context={this.state.context}
+                        parentId={this.props.match.params.boardId}
+
+                        onAddList={this.props.onAddList}
+                    ></AddItem>
                 </div>
             </div>
         )

@@ -1,21 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppHeaderBar from './containers/app.header.jsx';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {BrowserRouter as Router} from 'react-router-dom';
 import './main.css';
 
-const App = () => {
-    return (
-        <MuiThemeProvider>
-            <Router>
-                <AppHeaderBar />
-            </Router>
-        </MuiThemeProvider>
-    );
-};
+import ActionReducers from './reducers';
+import {createStore, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+import App from './app';
+
+let store = createStore(ActionReducers,{boardCollection: [],listCollection: []},applyMiddleware(thunk));
+
 
 ReactDOM.render(
-    <App />,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.getElementById('root')
 );

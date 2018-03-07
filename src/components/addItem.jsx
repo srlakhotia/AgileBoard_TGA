@@ -44,78 +44,15 @@ export default class AddItem extends Component {
 
             switch(this.props.context) {
                 case 'board': {
-                    client.mutation({
-                        addBoard: {
-                            variables: {title: title},
-                            result: `
-                                _id
-                                title
-                            `
-                        }
-                    }).then(result => {
-                        let newData;
-                        if(!result.error) {
-                            newData = {
-                                title: result.data.addBoard.title,
-                                _id: result.data.addBoard._id
-                            }
-                            this.props.updateState(newData);
-                        }
-                    });
+                    this.props.onAddBoard(title);
                     break;
                 }
                 case 'list': {
-                    client.mutation({
-                        addList: {
-                            variables: {
-                                title: title,
-                                parentId: this.props.parentId
-                            },
-                            result: `
-                                _id
-                                title
-                                parentId
-                                cards {
-                                    _id
-                                    title
-                                }
-                            `
-                        }
-                    }).then(result => {
-                        let newData;
-                        if(!result.error) {
-                            newData = {
-                                title: result.data.addList.title,
-                                _id: result.data.addList._id,
-                                parentId: result.data.addList.parentId,
-                                cards: result.data.addList.cards
-                            }
-                            this.props.updateState(newData);
-                        }
-                    });
+                    this.props.onAddList(title, this.props.parentId);
                     break;
                 }
                 case 'card': {
-                    client.mutation({
-                        addCard: {
-                            variables: {
-                                title: title,
-                                listId: this.props.parentId
-                            },
-                            result: `
-                                cards {
-                                    title
-                                    _id
-                                }
-                            `
-                        }
-                    }).then(result => {
-                        let newData;
-                        if(!result.error) {
-                            newData = result.data.addCard.cards;
-                            this.props.updateState(newData);
-                        }
-                    });
+                    this.props.onAddCard(title, this.props.parentId);
                     break;
                 }
                 default: {
@@ -137,6 +74,7 @@ export default class AddItem extends Component {
             />,
             <RaisedButton
               label="Add"
+              type="submit"
               primary={true}
               onClick={(ev) => {this.closeDialog(ev, true);}}
             />,
@@ -158,6 +96,7 @@ export default class AddItem extends Component {
                     fullWidth={true}
                     id="new_title"
                     errorText={this.state.requiredError}
+                    autoFocus={true}
                 />
                 </Dialog>
             </React.Fragment>

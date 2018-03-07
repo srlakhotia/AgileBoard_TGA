@@ -28,7 +28,7 @@ export default class BoardCard extends Component {
                     <Link to={boardLink}>
                         <RaisedButton label="View" primary={true} style={this.styles.firstButton}/>
                     </Link>
-                    <RaisedButton label="Delete" />
+                    <RaisedButton label="Delete" onClick={(evt) => this.props.onRemoveBoard(this.props.boardDetails._id)} />
                 </div>
             </div>
 

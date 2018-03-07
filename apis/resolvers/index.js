@@ -32,7 +32,23 @@ const resolveFunctions = {
         moveCard(_, {input}, ctx) {
             const list = new ListConnector.List();
             return list.moveCard(input);
+        },
+
+        removeBoard(_, {input}, ctx) {
+            const board = new BoardConnector.Board();
+            return board.removeBoard(input);
+        },
+
+        removeList(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.removeList(input);
+        },
+
+        removeCard(_, {input}, ctx) {
+            const list = new ListConnector.List();
+            return list.removeCard(input);
         }
+
     }
 };
 

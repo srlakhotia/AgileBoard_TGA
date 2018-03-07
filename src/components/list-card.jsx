@@ -6,15 +6,12 @@ import AddItem from './addItem.jsx';
 import Dialog from 'material-ui/Dialog';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
-import 'isomorphic-fetch';
-import api, {GraphQLCall} from 'graphql-call';
 
 export default class ListCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             context: 'card',
-            cards: this.props.listDetails.cards,
             dialogOpen: false,
             dialogValue: this.props.listDetails._id,
             movingCardId: ''
@@ -29,9 +26,6 @@ export default class ListCard extends Component {
         };
 
         this.styles = {
-            listContainer: {},
-            cardTitle: {},
-            cardContainer: {},
             cardItem: {
                 listStyleType: 'none',
                 margin: '7px 0',
@@ -56,22 +50,7 @@ export default class ListCard extends Component {
 
         this.moveCardtoNewList = (oldList, newList) => {
             if(oldList !== newList) {
-                let client = api({url: 'http://localhost:3000/graphql'});
-
-                client.mutation({
-                    moveCard: {
-                        variables: {
-                            prevListId: oldList,
-                            newListId: newList,
-                            cardId: this.state.movingCardId
-                        },
-                        result: `
-                            _id
-                        `
-                    }
-                }).then(result => {
-                    this.props.reloadLists();
-                });
+                this.props.onMoveCard(oldList, newList, this.state.movingCardId);
             }
         }
 
@@ -114,11 +93,12 @@ export default class ListCard extends Component {
     }
 
     render() {
-        const cardMap = this.state.cards.map((card, idx) => {
+        const cardMap = this.props.listDetails.cards.map((card, idx) => {
             return (<li style={this.styles.cardItem} key={idx}>
-                <span style={this.styles.cardTitle}>{card.title}</span>
+                <span>{card.title}</span>
                 <span style={this.styles.moveButton}>
                     <RaisedButton secondary={true} label="Move" onClick={(ev) => this.openDialog(card)} />
+                    <RaisedButton default={true} label="Delete" onClick={(ev) => this.props.onRemoveCard(card._id, this.props.listDetails._id, this.props.listDetails.parentId)} />
                 </span>
                 <div className="clearfix"></div>
             </li>);
@@ -137,18 +117,23 @@ export default class ListCard extends Component {
             />,
           ];
         return (<React.Fragment>
-            <div style={this.styles.listContainer}>
-                <div style={this.styles.cardTitle}>
+            <div>
+                <div>
                     <h3>{this.props.listDetails.title}</h3>
                 </div>
-                <ul style={this.styles.cardContainer}>{cardMap}</ul>
+                <ul>{cardMap}</ul>
             </div>
 
             <div>
                 <div style={this.styles.fabSmall}>
-                    <AddItem label="Add Card" updateState={(evt) => this.updateOnAdd(evt)} context={this.state.context} parentId={this.props.listDetails._id}></AddItem>
+                    <AddItem
+                        label="Add Card"
+                        context={this.state.context}
+                        onAddCard={this.props.onAddCard}
+                        parentId={this.props.listDetails._id}
+                    ></AddItem>
                 </div>
-                <RaisedButton label="Delete List" />
+                <RaisedButton label="Delete List"  onClick={(ev) => this.props.onRemoveList(this.props.listDetails._id, this.props.listDetails.parentId)}/>
             </div>
             <Dialog
                     title={this.moveCardDialogLabel}
