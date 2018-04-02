@@ -22,7 +22,7 @@ npm
 Clone the repository
 
 ```
-git clone https://github.com/srlakhotia/AgileBoard_TGA.git -b redux
+git clone https://github.com/srlakhotia/AgileBoard_TGA.git
 ```
 
 Install Dependencies
