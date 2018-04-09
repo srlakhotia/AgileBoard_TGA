@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mongo-web:
+    image: mongo
+    ports:
+      - 27017:27017
+  web:
+    build: ./
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/usr/src/app
+    links:
+     - mongo-web:mongo-web
+    environment:
+      MONGO_URL: mongodb://mongo-web/boarddb

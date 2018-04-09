@@ -9,7 +9,7 @@ import {
     REMOVE_CARD
 } from '../actionTypes';
 
-const client = api({url: 'http://localhost:3000/graphql'});
+const client = api({url: 'http://'+window.location.hostname+':3000/graphql'});
 
 function getLists(boardId) {
     let action = {};

@@ -4301,7 +4301,7 @@ var AddItem = function (_Component) {
         };
 
         _this.addItem = function (title, parentId) {
-            var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
+            var client = (0, _graphqlCall2.default)({ url: 'http://' + window.location.hostname + ':3000/graphql' });
 
             switch (_this.props.context) {
                 case 'board':
@@ -48777,7 +48777,7 @@ var _graphqlCall2 = _interopRequireDefault(_graphqlCall);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
+var client = (0, _graphqlCall2.default)({ url: 'http://' + window.location.hostname + ':3000/graphql' });
 
 function onAddBoard(newBoardTitle) {
     var action = {};
@@ -48878,7 +48878,7 @@ var _actionTypes = __webpack_require__(54);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var client = (0, _graphqlCall2.default)({ url: 'http://localhost:3000/graphql' });
+var client = (0, _graphqlCall2.default)({ url: 'http://' + window.location.hostname + ':3000/graphql' });
 
 function getLists(boardId) {
     var action = {};
