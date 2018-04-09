@@ -40,7 +40,7 @@ export default class AddItem extends Component {
         };
 
         this.addItem = (title, parentId) => {
-            let client = api({url: 'http://localhost:3000/graphql'});
+            const client = api({url: 'http://'+window.location.hostname+':3000/graphql'});
 
             switch(this.props.context) {
                 case 'board': {

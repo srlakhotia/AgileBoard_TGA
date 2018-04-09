@@ -6,7 +6,7 @@ import {
 import 'isomorphic-fetch';
 import api, {GraphQLCall} from 'graphql-call';
 
-const client = api({url: 'http://localhost:3000/graphql'});
+const client = api({url: 'http://'+window.location.hostname+':3000/graphql'});
 
 function onAddBoard(newBoardTitle) {
     let action = {};
