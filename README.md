@@ -1,5 +1,5 @@
 
-# Agile Board TGA (Can be dockerized)
+# Agile Board TGA
 
 A simple agile board featuring board, list and card way to manage work
 
